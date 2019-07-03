@@ -1,4 +1,3 @@
-package bva2;
 
 public abstract class ImageFeatureBase {
 
