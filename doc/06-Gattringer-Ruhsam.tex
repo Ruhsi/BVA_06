@@ -1,0 +1,100 @@
+\documentclass[11pt, a4paper, twoside]{article}   	% use "amsart" instead of "article" for AMSLaTeX format
+
+\usepackage{geometry}                		% See geometry.pdf to learn the layout options. There are lots.
+\usepackage{pdfpages}
+\usepackage{caption}
+\usepackage{minted}
+\usepackage[german]{babel}			% this end the next are needed for german umlaute
+\usepackage[utf8]{inputenc}
+\usepackage{color}
+\usepackage{graphicx}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{hyperref}
+\usepackage[autostyle=false, style=english]{csquotes}
+\usepackage{mathtools}
+\usepackage{tabularx}
+% http://www.artofproblemsolving.com/wiki/index.php/LaTeX:Symbols#Operators
+% =============================================
+% Layout & Colors
+% =============================================
+\geometry{
+   a4paper,
+   total={210mm,297mm},
+   left=20mm,
+   right=20mm,
+   top=20mm,
+   bottom=30mm
+ }	
+
+\definecolor{myred}{rgb}{0.8,0,0}
+\definecolor{mygreen}{rgb}{0,0.6,0}
+\definecolor{mygray}{rgb}{0.5,0.5,0.5}
+\definecolor{mymauve}{rgb}{0.58,0,0.82}
+
+\setcounter{secnumdepth}{4}
+
+
+% the default java directory structure and the main packages
+\newcommand{\srcDir}{../src/ImageJ/plugins/bva2}
+\newcommand{\imageDir}{images}
+
+
+% =============================================
+% Code Settings
+% =============================================
+\newenvironment{code}{\captionsetup{type=listing}}{}
+\newmintedfile[javaFile]{java}{
+	linenos=true, 
+	frame=single, 
+	breaklines=true, 
+	tabsize=2,
+	numbersep=5pt,
+	xleftmargin=10pt,
+	baselinestretch=1,
+	fontsize=\footnotesize
+}
+
+\newmintinline[inlineJava]{java}{}
+\newminted[javaSource]{java}{
+	breaklines=true, 
+	tabsize=2,
+	autogobble=true,
+	breakautoindent=false
+}
+
+
+\newcommand{\xvdash}[1]{%
+  \vdash^{\mkern-10mu\scriptscriptstyle\rule[-.9ex]{0pt}{0pt}#1}%
+}
+
+% =============================================
+% Page Style, Footers & Headers, Title
+% =============================================
+\title{Übung 6}
+\author{Gattringer Marko, Ruhsam Christoph}
+
+\lhead{Gattringer Marko, Ruhsam Christoph}
+\chead{BVA}
+\rhead{Übung 6}
+
+\lfoot{S1810454012, S1810454036}
+\cfoot{}
+\rfoot{ \thepage / \pageref{LastPage} }
+\renewcommand{\footrulewidth}{0.4pt}
+% =============================================
+% D O C U M E N T     C O N T E N T
+% =============================================
+% =============================================
+% 2016.10.13: 1 
+% 2016.10.14: 2
+% =============================================
+\pagestyle{fancy}
+\begin{document}
+\setlength{\headheight}{15mm}
+\includepdf[pages={1,2}]{Angabe.pdf}
+
+
+
+\end{document}
