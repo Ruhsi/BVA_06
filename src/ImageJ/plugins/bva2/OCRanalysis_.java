@@ -1,7 +1,9 @@
 
 import com.sun.imageio.plugins.common.ImageUtil;
+import com.sun.javaws.exceptions.InvalidArgumentException;
 import ij.IJ;
 import ij.ImagePlus;
+import ij.gui.GenericDialog;
 import ij.plugin.filter.PlugInFilter;
 import ij.process.ImageProcessor;
 
@@ -38,7 +40,8 @@ public class OCRanalysis_ implements PlugInFilter {
     public void run(ImageProcessor ip) {
         Vector<ImageFeatureBase> featureVect = new Vector<ImageFeatureBase>();
         featureVect.add(new ImageFeatureF_FGcount());
-        //TODO: build up feature vector
+        featureVect.add(new ImageFeatureF_MaxDistX());
+        featureVect.add(new ImageFeatureF_MaxDistY());
 
 
         byte[] pixels = (byte[]) ip.getPixels();
@@ -67,20 +70,30 @@ public class OCRanalysis_ implements PlugInFilter {
             subImageRegion.showImage();
         }
 
-        //TODO: let the user specify the target character
-//        int tgtCharRow = 0;
-//        int tgtCharCol = 4;
-//        SubImageRegion charROI = splittedCharacters.get(tgtCharRow).get(tgtCharCol);
-//        bva2.ImageJUtility.showNewImage(charROI.subImgArr, charROI.width, charROI.height, "char at pos " + tgtCharRow + " / " + tgtCharCol);
-//
-//        //calculate features of reference character
-//        double[] featureResArr = calcFeatureArr(charROI, BG_VAL, featureVect);
-//        printoutFeatureRes(featureResArr, featureVect);
-//
+        //let the user specify the target character
+        final int[] max = {0};
+        splittedCharacters.stream().forEach(e -> {
+            if (e.size() > max[0]) {
+                max[0] = e.size();
+            }
+        });
+        GenericDialog dialog = createDialog("tgtCharRow", splittedCharacters.size(), "tgtCharCol", max[0]);
+        int tgtCharRow = (int) dialog.getNextNumber();
+        int tgtCharCol = (int) dialog.getNextNumber();
+        System.out.println("Chosen row: " + tgtCharRow);
+        System.out.println("Chosen col: " + tgtCharCol);
+
+        SubImageRegion charROI = splittedCharacters.get(tgtCharRow).get(tgtCharCol);
+        bva2.ImageJUtility.showNewImage(charROI.subImgArr, charROI.width, charROI.height, "char at pos " + tgtCharRow + " / " + tgtCharCol);
+
+        //calculate features of reference character
+        double[] featureResArr = calcFeatureArr(charROI, FG_VAL, featureVect);
+        printoutFeatureRes(featureResArr, featureVect);
+
 //        //TODO calculate mean values for all features based on all characters
 //        //==> required for normalization
-//        double[] normArr = calculateNormArr(splittedCharacters, BG_VAL, featureVect);
-//        printoutFeatureRes(normArr, featureVect);
+        double[] normArr = calculateNormArr(splittedCharacters, BG_VAL, featureVect);
+        printoutFeatureRes(normArr, featureVect);
 //
 //        int hitCount = 0; //count the number of detected characters
 //
@@ -121,7 +134,9 @@ public class OCRanalysis_ implements PlugInFilter {
     double[] calcFeatureArr(SubImageRegion region, int FGval, Vector<ImageFeatureBase> featuresToUse) {
         //TODO implementation required
         double[] featureResArr = new double[featuresToUse.size()];
-        //foreach feature f in featuresToUse resultVal = f.CalcFeatureVal(...)
+        for (int i = 0; i < featuresToUse.size(); i++) {
+            featureResArr[i] = featuresToUse.get(i).CalcFeatureVal(region, FGval);
+        }
 
         return featureResArr;
     }
@@ -199,30 +214,7 @@ public class OCRanalysis_ implements PlugInFilter {
 
         return returnCharArr;
     }
-
-    //probably useful helper method
-    public boolean isEmptyRow(int[][] inImg, int width, int rowIdx, int BG_val) {
-        for (int x = 0; x < width; x++) {
-            if (inImg[x][rowIdx] != BG_val) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    //probably useful helper method
-    public boolean isEmptyColumn(int[][] inImg, int height, int colIdx, int BG_val) {
-        for (int y = 0; y < height; y++) {
-            if (inImg[colIdx][y] != BG_val) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-
+    
     void showAbout() {
         IJ.showMessage("About Template_...",
                 "this is a RegionGrowing_ template\n");
@@ -241,8 +233,8 @@ public class OCRanalysis_ implements PlugInFilter {
         public double CalcFeatureVal(SubImageRegion imgRegion, int FG_val) {
             double count = 0;
 
-            for (int x = imgRegion.startX; x < imgRegion.startX + imgRegion.width; x++) {
-                for (int y = imgRegion.startY; y < imgRegion.startY + imgRegion.height; y++) {
+            for (int x = 0; x < imgRegion.width; x++) {
+                for (int y = 0; y < imgRegion.height; y++) {
                     if (imgRegion.subImgArr[x][y] == FG_val) {
                         count++;
                     }
@@ -260,7 +252,19 @@ public class OCRanalysis_ implements PlugInFilter {
         }
 
         public double CalcFeatureVal(SubImageRegion imgRegion, int FG_val) {
-            return -1; //TODO implementation required
+            int maxNumberOfFGInLine = 0;
+            int counter = 0;
+
+            for (int y = 0; y < imgRegion.height; y++) {
+                counter = 0;
+                for (int x = 0; x < imgRegion.width; x++) {
+                    if (imgRegion.subImgArr[x][y] == FG_val) {
+                        counter++;
+                    }
+                }
+                if (counter > maxNumberOfFGInLine) maxNumberOfFGInLine = counter;
+            }
+            return maxNumberOfFGInLine;
         }
 
     }
@@ -272,7 +276,19 @@ public class OCRanalysis_ implements PlugInFilter {
         }
 
         public double CalcFeatureVal(SubImageRegion imgRegion, int FG_val) {
-            return -1; //TODO implementation required
+            int maxNumberOfFGInLine = 0;
+            int counter = 0;
+
+            for (int x = 0; x < imgRegion.width; x++) {
+                counter = 0;
+                for (int y = 0; y < imgRegion.height; y++) {
+                    if (imgRegion.subImgArr[x][y] == FG_val) {
+                        counter++;
+                    }
+                }
+                if (counter > maxNumberOfFGInLine) maxNumberOfFGInLine = counter;
+            }
+            return maxNumberOfFGInLine;
         }
 
     }
@@ -345,6 +361,17 @@ public class OCRanalysis_ implements PlugInFilter {
             return -1; //TODO implementation required
         }
 
+    }
+
+    private GenericDialog createDialog(String rowName, int maxRow, String colName, int maxCol) {
+        GenericDialog gd = new GenericDialog("User Input");
+        gd.addSlider(rowName, 0, maxRow - 1, 1);
+        gd.addSlider(colName, 0, maxCol - 1, 1);
+        gd.showDialog();
+        if (gd.wasCanceled()) {
+            return null;
+        } //if
+        return gd;
     }
 
 } //class OCRanalysisTemplate
