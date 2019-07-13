@@ -396,7 +396,7 @@ public class OCRanalysis_ implements PlugInFilter {
     class ImageFeatureF_Circularity extends ImageFeatureBase {
 
         public ImageFeatureF_Circularity() {
-            this.description = "Circularit�t";
+            this.description = "Circularitaet";
         }
 
         public double CalcFeatureVal(SubImageRegion imgRegion, int FG_val) {
@@ -412,7 +412,8 @@ public class OCRanalysis_ implements PlugInFilter {
         }
 
         public double CalcFeatureVal(SubImageRegion imgRegion, int FG_val) {
-            return -1; //TODO implementation required
+        	Point centroid = calcCentroid(imgRegion, FG_val);
+            return calcDistance(centroid.x, centroid.y, centroid.x, 0);
         }
 
     }
@@ -424,7 +425,8 @@ public class OCRanalysis_ implements PlugInFilter {
         }
 
         public double CalcFeatureVal(SubImageRegion imgRegion, int FG_val) {
-            return -1; //TODO implementation required
+        	Point centroid = calcCentroid(imgRegion, FG_val);
+            return calcDistance(centroid.x, centroid.y, 0, centroid.y);
         }
 
     }
