@@ -299,6 +299,25 @@ public class OCRanalysis_ implements PlugInFilter {
     	return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
     }
 
+    private Point calcCentroid(SubImageRegion imgRegion, int FG_val) {
+    	// https://ask2mujahed.wordpress.com/category/research-topics/ocr/
+    	
+    	int centroidX = 0;
+    	int centroidY = 0;
+    	int cnt = 0;
+    	for(int x = 0; x < imgRegion.width; x++) {
+    		for(int y = 0; y < imgRegion.height; y++) {
+    			if(imgRegion.subImgArr[x][y] == FG_val) {
+    				centroidX += x;
+    				centroidY += y;
+    				cnt++;
+    			}
+    		}
+    	}
+    	
+    	return new Point(centroidX / cnt, centroidY / cnt);
+    }
+
     class ImageFeatureF_AvgDistanceCentroide extends ImageFeatureBase {
 
         public ImageFeatureF_AvgDistanceCentroide() {
@@ -306,15 +325,14 @@ public class OCRanalysis_ implements PlugInFilter {
         }
 
         public double CalcFeatureVal(SubImageRegion imgRegion, int FG_val) {
-            int centerX = 0;
-        	int centerY = 0;
+        	Point centroid = calcCentroid(imgRegion, FG_val);
         	
         	double avgDist = 0;
         	int cnt = 0;
         	for(int x = 0; x < imgRegion.width; x++) {
         		for(int y = 0; y < imgRegion.height; y++) {
         			if(imgRegion.subImgArr[x][y] == FG_val) {
-        				avgDist += calcDistance(centerX, centerY, x, y);
+        				avgDist += calcDistance(centroid.x, centroid.y, x, y);
         				cnt++;
         			}
         		}
@@ -323,7 +341,7 @@ public class OCRanalysis_ implements PlugInFilter {
         	return avgDist / cnt;
         }
     }
-
+    
     class ImageFeatureF_MaxDistanceCentroide extends ImageFeatureBase {
 
         public ImageFeatureF_MaxDistanceCentroide() {
@@ -331,14 +349,13 @@ public class OCRanalysis_ implements PlugInFilter {
         }
 
         public double CalcFeatureVal(SubImageRegion imgRegion, int FG_val) {
-            int centerX = imgRegion.width / 2;
-        	int centerY = imgRegion.height / 2;
+        	Point centroid = calcCentroid(imgRegion, FG_val);
         	
         	double maxDist = 0;
         	for(int x = 0; x < imgRegion.width; x++) {
         		for(int y = 0; y < imgRegion.height; y++) {
         			if(imgRegion.subImgArr[x][y] == FG_val) {
-        				double actDist = calcDistance(centerX, centerY, x, y);
+        				double actDist = calcDistance(centroid.x, centroid.y, x, y);
             			if(actDist > maxDist) {
             				maxDist = actDist;
             			}	
@@ -357,14 +374,13 @@ public class OCRanalysis_ implements PlugInFilter {
         }
 
         public double CalcFeatureVal(SubImageRegion imgRegion, int FG_val) {
-            int centerX = imgRegion.width / 2;
-        	int centerY = imgRegion.height / 2;
+        	Point centroid = calcCentroid(imgRegion, FG_val);
         	
         	double minDist = Double.MAX_VALUE;
         	for(int x = 0; x < imgRegion.width; x++) {
         		for(int y = 0; y < imgRegion.height; y++) {
         			if(imgRegion.subImgArr[x][y] == FG_val) {
-        				double actDist = calcDistance(centerX, centerY, x, y);
+        				double actDist = calcDistance(centroid.x, centroid.y, x, y);
         				if(actDist < minDist) {
         					minDist = actDist;
         				}
