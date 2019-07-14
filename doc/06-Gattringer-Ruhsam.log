@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (MiKTeX 2.9.6350 64-bit) (preloaded format=pdflatex 2017.9.17)  14 JUL 2019 16:05
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (MiKTeX 2.9.6350 64-bit) (preloaded format=pdflatex 2017.9.17)  14 JUL 2019 19:25
 entering extended mode
 **./06-Gattringer-Ruhsam.tex
 (06-Gattringer-Ruhsam.tex
@@ -1003,7 +1003,7 @@ LaTeX Info: Redefining \nameref on input line 94.
 \openout6 = `06-Gattringer-Ruhsam.out'.
 
 
-<Angabe.pdf, id=19, 597.55246pt x 845.07718pt>
+<Angabe.pdf, id=27, 597.55246pt x 845.07718pt>
 File: Angabe.pdf Graphic file (type pdf)
  <use Angabe.pdf>
 Package pdftex.def Info: Angabe.pdf used on input line 96.
@@ -1018,7 +1018,7 @@ File: Angabe.pdf Graphic file (type pdf)
 Package pdftex.def Info: Angabe.pdf used on input line 96.
 (pdftex.def)             Requested size: 597.551pt x 845.07512pt.
 
-<Angabe.pdf, id=23, page=1, 597.55246pt x 845.07718pt>
+<Angabe.pdf, id=31, page=1, 597.55246pt x 845.07718pt>
 File: Angabe.pdf Graphic file (type pdf)
 
 <use Angabe.pdf, page 1>
@@ -1056,7 +1056,7 @@ Package babel Info: Redefining german shorthand "~
  [1
 
  <./Angabe.pdf>]
-<Angabe.pdf, id=86, page=2, 597.55246pt x 845.07718pt>
+<Angabe.pdf, id=94, page=2, 597.55246pt x 845.07718pt>
 File: Angabe.pdf Graphic file (type pdf)
 
 <use Angabe.pdf, page 2>
@@ -1090,202 +1090,260 @@ Package babel Info: Redefining german shorthand "|
 (babel)             in language  on input line 99.
 Package babel Info: Redefining german shorthand "~
 (babel)             in language  on input line 99.
-
-
-Package hyperref Warning: Difference (2) between bookmark levels is greater 
-(hyperref)                than one, level fixed on input line 100.
-
 Package babel Info: Redefining german shorthand "f
 (babel)             in language  on input line 100.
 Package babel Info: Redefining german shorthand "|
 (babel)             in language  on input line 100.
 Package babel Info: Redefining german shorthand "~
 (babel)             in language  on input line 100.
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 104.
+
+ ("C:\Program Files\MiKTeX 2.9\tex\latex\base\omscmr.fd"
+File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
+)
+LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10.95> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 104.
+
+Overfull \hbox (0.84222pt too wide) in paragraph at lines 111--113
+[]\OT1/cmr/bx/n/10.95 calcFeatureArr(SubImageRegion re-gi-on, int FGval, Vector
+$\OML/cmm/m/it/10.95 <$\OT1/cmr/bx/n/10.95 ImageFeatureBase$\OML/cmm/m/it/10.95
+ >$ \OT1/cmr/bx/n/10.95 fea-
+ []
+
 Package babel Info: Redefining german shorthand "f
-(babel)             in language  on input line 104.
+(babel)             in language  on input line 117.
 Package babel Info: Redefining german shorthand "|
-(babel)             in language  on input line 104.
+(babel)             in language  on input line 117.
 Package babel Info: Redefining german shorthand "~
-(babel)             in language  on input line 104.
+(babel)             in language  on input line 117.
+Package babel Info: Redefining german shorthand "f
+(babel)             in language  on input line 139.
+Package babel Info: Redefining german shorthand "|
+(babel)             in language  on input line 139.
+Package babel Info: Redefining german shorthand "~
+(babel)             in language  on input line 139.
+Package babel Info: Redefining german shorthand "f
+(babel)             in language  on input line 139.
+Package babel Info: Redefining german shorthand "|
+(babel)             in language  on input line 139.
+Package babel Info: Redefining german shorthand "~
+(babel)             in language  on input line 139.
+[3{C:/ProgramData/MiKTeX/2.9/pdftex/config/pdftex.map}]
+Package babel Info: Redefining german shorthand "f
+(babel)             in language  on input line 144.
+Package babel Info: Redefining german shorthand "|
+(babel)             in language  on input line 144.
+Package babel Info: Redefining german shorthand "~
+(babel)             in language  on input line 144.
+Package babel Info: Redefining german shorthand "f
+(babel)             in language  on input line 158.
+Package babel Info: Redefining german shorthand "|
+(babel)             in language  on input line 158.
+Package babel Info: Redefining german shorthand "~
+(babel)             in language  on input line 158.
 Package hyperref Info: bookmark level for unknown listing defaults to 0 on inpu
-t line 106.
+t line 160.
+
 (_minted-06-Gattringer-Ruhsam/default-pyg-prefix.pygstyle)
 (_minted-06-Gattringer-Ruhsam/default.pygstyle)
-(_minted-06-Gattringer-Ruhsam/E9331A39ACC9FF2D298724E65C0E86B88523716767ED5362F
+(_minted-06-Gattringer-Ruhsam/9D92CC3668615128ECDDA740DAC563F48523716767ED5362F
 1DDF433E26B1F79.pygtex
 LaTeX Font Info:    Font shape `OT1/cmtt/bx/n' in size <9> not available
 (Font)              Font shape `OT1/cmtt/m/n' tried instead on input line 2.
 Package babel Info: Redefining german shorthand "f
-(babel)             in language  on input line 56.
+(babel)             in language  on input line 31.
 Package babel Info: Redefining german shorthand "|
-(babel)             in language  on input line 56.
+(babel)             in language  on input line 31.
 Package babel Info: Redefining german shorthand "~
-(babel)             in language  on input line 56.
+(babel)             in language  on input line 31.
 Package babel Info: Redefining german shorthand "f
-(babel)             in language  on input line 56.
+(babel)             in language  on input line 31.
 Package babel Info: Redefining german shorthand "|
-(babel)             in language  on input line 56.
+(babel)             in language  on input line 31.
 Package babel Info: Redefining german shorthand "~
-(babel)             in language  on input line 56.
- [3{C:/ProgramData/MiKTeX/2.9/pdftex/config/pdftex.map}]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-Package babel Info: Redefining german shorthand "f
-(babel)             in language  on input line 113.
-Package babel Info: Redefining german shorthand "|
-(babel)             in language  on input line 113.
-Package babel Info: Redefining german shorthand "~
-(babel)             in language  on input line 113.
-Package babel Info: Redefining german shorthand "f
-(babel)             in language  on input line 113.
-Package babel Info: Redefining german shorthand "|
-(babel)             in language  on input line 113.
-Package babel Info: Redefining german shorthand "~
-(babel)             in language  on input line 113.
+(babel)             in language  on input line 31.
  [4]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 Package babel Info: Redefining german shorthand "f
-(babel)             in language  on input line 169.
+(babel)             in language  on input line 90.
 Package babel Info: Redefining german shorthand "|
-(babel)             in language  on input line 169.
+(babel)             in language  on input line 90.
 Package babel Info: Redefining german shorthand "~
-(babel)             in language  on input line 169.
+(babel)             in language  on input line 90.
 Package babel Info: Redefining german shorthand "f
-(babel)             in language  on input line 169.
+(babel)             in language  on input line 90.
 Package babel Info: Redefining german shorthand "|
-(babel)             in language  on input line 169.
+(babel)             in language  on input line 90.
 Package babel Info: Redefining german shorthand "~
-(babel)             in language  on input line 169.
+(babel)             in language  on input line 90.
  [5]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 Package babel Info: Redefining german shorthand "f
-(babel)             in language  on input line 228.
+(babel)             in language  on input line 148.
 Package babel Info: Redefining german shorthand "|
-(babel)             in language  on input line 228.
+(babel)             in language  on input line 148.
 Package babel Info: Redefining german shorthand "~
-(babel)             in language  on input line 228.
+(babel)             in language  on input line 148.
 Package babel Info: Redefining german shorthand "f
-(babel)             in language  on input line 228.
+(babel)             in language  on input line 148.
 Package babel Info: Redefining german shorthand "|
-(babel)             in language  on input line 228.
+(babel)             in language  on input line 148.
 Package babel Info: Redefining german shorthand "~
-(babel)             in language  on input line 228.
+(babel)             in language  on input line 148.
  [6]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 Package babel Info: Redefining german shorthand "f
-(babel)             in language  on input line 291.
+(babel)             in language  on input line 208.
 Package babel Info: Redefining german shorthand "|
-(babel)             in language  on input line 291.
+(babel)             in language  on input line 208.
 Package babel Info: Redefining german shorthand "~
-(babel)             in language  on input line 291.
+(babel)             in language  on input line 208.
 Package babel Info: Redefining german shorthand "f
-(babel)             in language  on input line 291.
+(babel)             in language  on input line 208.
 Package babel Info: Redefining german shorthand "|
-(babel)             in language  on input line 291.
+(babel)             in language  on input line 208.
 Package babel Info: Redefining german shorthand "~
-(babel)             in language  on input line 291.
+(babel)             in language  on input line 208.
  [7]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 Package babel Info: Redefining german shorthand "f
-(babel)             in language  on input line 354.
+(babel)             in language  on input line 267.
 Package babel Info: Redefining german shorthand "|
-(babel)             in language  on input line 354.
+(babel)             in language  on input line 267.
 Package babel Info: Redefining german shorthand "~
-(babel)             in language  on input line 354.
+(babel)             in language  on input line 267.
 Package babel Info: Redefining german shorthand "f
-(babel)             in language  on input line 354.
+(babel)             in language  on input line 267.
 Package babel Info: Redefining german shorthand "|
-(babel)             in language  on input line 354.
+(babel)             in language  on input line 267.
 Package babel Info: Redefining german shorthand "~
-(babel)             in language  on input line 354.
+(babel)             in language  on input line 267.
  [8]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 Package babel Info: Redefining german shorthand "f
-(babel)             in language  on input line 417.
+(babel)             in language  on input line 329.
 Package babel Info: Redefining german shorthand "|
-(babel)             in language  on input line 417.
+(babel)             in language  on input line 329.
 Package babel Info: Redefining german shorthand "~
-(babel)             in language  on input line 417.
+(babel)             in language  on input line 329.
 Package babel Info: Redefining german shorthand "f
-(babel)             in language  on input line 417.
+(babel)             in language  on input line 329.
 Package babel Info: Redefining german shorthand "|
-(babel)             in language  on input line 417.
+(babel)             in language  on input line 329.
 Package babel Info: Redefining german shorthand "~
-(babel)             in language  on input line 417.
- [9])
+(babel)             in language  on input line 329.
+ [9]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
 Package babel Info: Redefining german shorthand "f
-(babel)             in language  on input line 111.
+(babel)             in language  on input line 392.
 Package babel Info: Redefining german shorthand "|
-(babel)             in language  on input line 111.
+(babel)             in language  on input line 392.
 Package babel Info: Redefining german shorthand "~
-(babel)             in language  on input line 111.
+(babel)             in language  on input line 392.
+Package babel Info: Redefining german shorthand "f
+(babel)             in language  on input line 392.
+Package babel Info: Redefining german shorthand "|
+(babel)             in language  on input line 392.
+Package babel Info: Redefining german shorthand "~
+(babel)             in language  on input line 392.
+ [10]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+Package babel Info: Redefining german shorthand "f
+(babel)             in language  on input line 455.
+Package babel Info: Redefining german shorthand "|
+(babel)             in language  on input line 455.
+Package babel Info: Redefining german shorthand "~
+(babel)             in language  on input line 455.
+Package babel Info: Redefining german shorthand "f
+(babel)             in language  on input line 455.
+Package babel Info: Redefining german shorthand "|
+(babel)             in language  on input line 455.
+Package babel Info: Redefining german shorthand "~
+(babel)             in language  on input line 455.
+ [11]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+Package babel Info: Redefining german shorthand "f
+(babel)             in language  on input line 517.
+Package babel Info: Redefining german shorthand "|
+(babel)             in language  on input line 517.
+Package babel Info: Redefining german shorthand "~
+(babel)             in language  on input line 517.
+Package babel Info: Redefining german shorthand "f
+(babel)             in language  on input line 517.
+Package babel Info: Redefining german shorthand "|
+(babel)             in language  on input line 517.
+Package babel Info: Redefining german shorthand "~
+(babel)             in language  on input line 517.
+ [12])
+Package babel Info: Redefining german shorthand "f
+(babel)             in language  on input line 165.
+Package babel Info: Redefining german shorthand "|
+(babel)             in language  on input line 165.
+Package babel Info: Redefining german shorthand "~
+(babel)             in language  on input line 165.
 
 
 AED: lastpage setting LastPage
 Package babel Info: Redefining german shorthand "f
-(babel)             in language  on input line 113.
+(babel)             in language  on input line 167.
 Package babel Info: Redefining german shorthand "|
-(babel)             in language  on input line 113.
+(babel)             in language  on input line 167.
 Package babel Info: Redefining german shorthand "~
-(babel)             in language  on input line 113.
+(babel)             in language  on input line 167.
 Package babel Info: Redefining german shorthand "f
-(babel)             in language  on input line 113.
+(babel)             in language  on input line 167.
 Package babel Info: Redefining german shorthand "|
-(babel)             in language  on input line 113.
+(babel)             in language  on input line 167.
 Package babel Info: Redefining german shorthand "~
-(babel)             in language  on input line 113.
-[10]
+(babel)             in language  on input line 167.
+[13]
 Package babel Info: Redefining german shorthand "f
-(babel)             in language  on input line 113.
+(babel)             in language  on input line 167.
 Package babel Info: Redefining german shorthand "|
-(babel)             in language  on input line 113.
+(babel)             in language  on input line 167.
 Package babel Info: Redefining german shorthand "~
-(babel)             in language  on input line 113.
-Package babel Info: Redefining german shorthand "f
-(babel)             in language  on input line 113.
-Package babel Info: Redefining german shorthand "|
-(babel)             in language  on input line 113.
-Package babel Info: Redefining german shorthand "~
-(babel)             in language  on input line 113.
- [11]
-Package babel Info: Redefining german shorthand "f
-(babel)             in language  on input line 113.
-Package babel Info: Redefining german shorthand "|
-(babel)             in language  on input line 113.
-Package babel Info: Redefining german shorthand "~
-(babel)             in language  on input line 113.
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 113.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 113.
+(babel)             in language  on input line 167.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 167.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 167.
  (06-Gattringer-Ruhsam.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 113.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 113.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 167.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 167.
 Package rerunfilecheck Info: File `06-Gattringer-Ruhsam.out' has not changed.
-(rerunfilecheck)             Checksum: 45B92C7369F0704EF580235C2B699124;272.
+(rerunfilecheck)             Checksum: 992E5EE9FF9EB16B64AA45A598322691;361.
  ) 
 Here is how much of TeX's memory you used:
- 13501 strings out of 493323
- 215802 string characters out of 3139066
+ 13545 strings out of 493323
+ 216428 string characters out of 3139066
  400133 words of memory out of 3000000
- 16796 multiletter control sequences out of 15000+200000
- 7020 words of font info for 27 fonts, out of 3000000 for 9000
+ 16828 multiletter control sequences out of 15000+200000
+ 9946 words of font info for 37 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
- 43i,18n,46p,915b,786s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 43i,18n,46p,915b,788s stack positions out of 5000i,500n,10000p,200000b,50000s
 <C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx10.pfb><C:/Pr
 ogram Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx12.pfb><C:/Program Fi
-les/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmitt10.pfb><C:/Program Files/MiK
-TeX 2.9/fonts/type1/public/amsfonts/cm/cmmi6.pfb><C:/Program Files/MiKTeX 2.9/f
-onts/type1/public/amsfonts/cm/cmr10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type
-1/public/amsfonts/cm/cmr6.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/a
-msfonts/cm/cmsy6.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/c
-m/cmtt9.pfb>
-Output written on 06-Gattringer-Ruhsam.pdf (11 pages, 877363 bytes).
+les/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Program Files/MiKT
+eX 2.9/fonts/type1/public/amsfonts/cm/cmitt10.pfb><C:/Program Files/MiKTeX 2.9/
+fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Program Files/MiKTeX 2.9/fonts/ty
+pe1/public/amsfonts/cm/cmmi6.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/publi
+c/amsfonts/cm/cmmi8.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfont
+s/cm/cmr10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr6
+.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/P
+rogram Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Program F
+iles/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy6.pfb><C:/Program Files/MiKT
+eX 2.9/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Program Files/MiKTeX 2.9/fo
+nts/type1/public/amsfonts/cm/cmti10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type
+1/public/amsfonts/cm/cmtt9.pfb>
+Output written on 06-Gattringer-Ruhsam.pdf (13 pages, 963397 bytes).
 PDF statistics:
- 179 PDF objects out of 1000 (max. 8388607)
- 17 named destinations out of 1000 (max. 500000)
- 63 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 227 PDF objects out of 1000 (max. 8388607)
+ 21 named destinations out of 1000 (max. 500000)
+ 79 words of extra memory for PDF output out of 10000 (max. 10000000)
 

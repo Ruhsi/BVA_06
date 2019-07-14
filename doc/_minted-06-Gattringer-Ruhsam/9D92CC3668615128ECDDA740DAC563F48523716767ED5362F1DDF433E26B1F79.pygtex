@@ -17,8 +17,8 @@
 
 \PYG{k+kd}{public} \PYG{k+kd}{class} \PYG{n+nc}{OCRanalysis\PYGZus{}} \PYG{k+kd}{implements} \PYG{n}{PlugInFilter} \PYG{o}{\PYGZob{}}
 
-	\PYG{k+kd}{private} \PYG{n}{ImagePlus} \PYG{n}{imp}\PYG{o}{;}
-	\PYG{k+kd}{private} \PYG{n}{ImageProcessor} \PYG{n}{ip}\PYG{o}{;}
+    \PYG{k+kd}{private} \PYG{n}{ImagePlus} \PYG{n}{imp}\PYG{o}{;}
+    \PYG{k+kd}{private} \PYG{n}{ImageProcessor} \PYG{n}{ip}\PYG{o}{;}
 
     \PYG{k+kd}{public} \PYG{k+kt}{int} \PYG{n+nf}{setup}\PYG{o}{(}\PYG{n}{String} \PYG{n}{arg}\PYG{o}{,} \PYG{n}{ImagePlus} \PYG{n}{imp}\PYG{o}{)} \PYG{o}{\PYGZob{}}
         \PYG{k}{if} \PYG{o}{(}\PYG{n}{arg}\PYG{o}{.}\PYG{n+na}{equals}\PYG{o}{(}\PYG{l+s}{\PYGZdq{}about\PYGZdq{}}\PYG{o}{))} \PYG{o}{\PYGZob{}}
@@ -45,8 +45,8 @@
 
 
     \PYG{k+kd}{public} \PYG{k+kt}{void} \PYG{n+nf}{run}\PYG{o}{(}\PYG{n}{ImageProcessor} \PYG{n}{ip}\PYG{o}{)} \PYG{o}{\PYGZob{}}
-    	\PYG{k}{this}\PYG{o}{.}\PYG{n+na}{ip} \PYG{o}{=} \PYG{n}{ip}\PYG{o}{;}
-    	
+        \PYG{k}{this}\PYG{o}{.}\PYG{n+na}{ip} \PYG{o}{=} \PYG{n}{ip}\PYG{o}{;}
+
         \PYG{n}{Vector}\PYG{o}{\PYGZlt{}}\PYG{n}{ImageFeatureBase}\PYG{o}{\PYGZgt{}} \PYG{n}{featureVect} \PYG{o}{=} \PYG{k}{new} \PYG{n}{Vector}\PYG{o}{\PYGZlt{}}\PYG{n}{ImageFeatureBase}\PYG{o}{\PYGZgt{}();}
         \PYG{n}{featureVect}\PYG{o}{.}\PYG{n+na}{add}\PYG{o}{(}\PYG{k}{new} \PYG{n}{ImageFeatureF\PYGZus{}FGcount}\PYG{o}{());}
         \PYG{n}{featureVect}\PYG{o}{.}\PYG{n+na}{add}\PYG{o}{(}\PYG{k}{new} \PYG{n}{ImageFeatureF\PYGZus{}MaxDistX}\PYG{o}{());}
@@ -55,6 +55,8 @@
         \PYG{n}{featureVect}\PYG{o}{.}\PYG{n+na}{add}\PYG{o}{(}\PYG{k}{new} \PYG{n}{ImageFeatureF\PYGZus{}MinDistanceCentroide}\PYG{o}{());}
         \PYG{n}{featureVect}\PYG{o}{.}\PYG{n+na}{add}\PYG{o}{(}\PYG{k}{new} \PYG{n}{ImageFeatureF\PYGZus{}AvgDistanceCentroide}\PYG{o}{());}
         \PYG{n}{featureVect}\PYG{o}{.}\PYG{n+na}{add}\PYG{o}{(}\PYG{k}{new} \PYG{n}{ImageFeatureF\PYGZus{}Circularity}\PYG{o}{());}
+        \PYG{n}{featureVect}\PYG{o}{.}\PYG{n+na}{add}\PYG{o}{(}\PYG{k}{new} \PYG{n}{ImageFeatureF\PYGZus{}CentroideRelPosX}\PYG{o}{());}
+        \PYG{n}{featureVect}\PYG{o}{.}\PYG{n+na}{add}\PYG{o}{(}\PYG{k}{new} \PYG{n}{ImageFeatureF\PYGZus{}CentroideRelPosY}\PYG{o}{());}
 
 
         \PYG{k+kt}{byte}\PYG{o}{[]} \PYG{n}{pixels} \PYG{o}{=} \PYG{o}{(}\PYG{k+kt}{byte}\PYG{o}{[])} \PYG{n}{ip}\PYG{o}{.}\PYG{n+na}{getPixels}\PYG{o}{();}
@@ -103,36 +105,60 @@
         \PYG{k+kt}{double}\PYG{o}{[]} \PYG{n}{featureResArr} \PYG{o}{=} \PYG{n}{calcFeatureArr}\PYG{o}{(}\PYG{n}{charROI}\PYG{o}{,} \PYG{n}{FG\PYGZus{}VAL}\PYG{o}{,} \PYG{n}{featureVect}\PYG{o}{);}
         \PYG{n}{printoutFeatureRes}\PYG{o}{(}\PYG{n}{featureResArr}\PYG{o}{,} \PYG{n}{featureVect}\PYG{o}{);}
 
-\PYG{c+c1}{//        //TODO calculate mean values for all features based on all characters}
-\PYG{c+c1}{//        //==\PYGZgt{} required for normalization}
-        \PYG{k+kt}{double}\PYG{o}{[]} \PYG{n}{normArr} \PYG{o}{=} \PYG{n}{calculateNormArr}\PYG{o}{(}\PYG{n}{splittedCharacters}\PYG{o}{,} \PYG{n}{BG\PYGZus{}VAL}\PYG{o}{,} \PYG{n}{featureVect}\PYG{o}{);}
+        \PYG{c+c1}{//calculate mean values for all features based on all characters}
+        \PYG{c+c1}{//==\PYGZgt{} required for normalization}
+        \PYG{k+kt}{double}\PYG{o}{[]} \PYG{n}{normArr} \PYG{o}{=} \PYG{n}{calculateNormArr}\PYG{o}{(}\PYG{n}{splittedCharacters}\PYG{o}{,} \PYG{n}{FG\PYGZus{}VAL}\PYG{o}{,} \PYG{n}{featureVect}\PYG{o}{);}
         \PYG{n}{printoutFeatureRes}\PYG{o}{(}\PYG{n}{normArr}\PYG{o}{,} \PYG{n}{featureVect}\PYG{o}{);}
-\PYG{c+c1}{//}
-\PYG{c+c1}{//        int hitCount = 0; //count the number of detected characters}
-\PYG{c+c1}{//}
-\PYG{c+c1}{//        //TODO: now detect all matching characters}
-\PYG{c+c1}{//        //forall SubImageRegion sir in splittedCharacters}
-\PYG{c+c1}{//        //if isMatchingChar(..,sir,..) then markRegionInImage(..,sir,..)}
-\PYG{c+c1}{//}
-\PYG{c+c1}{//}
-\PYG{c+c1}{//        IJ.log(\PYGZdq{}\PYGZsh{} of letters detected = \PYGZdq{} + hitCount);}
-\PYG{c+c1}{//}
-\PYG{c+c1}{//        bva2.ImageJUtility.showNewImage(binaryImgArr, width, height, \PYGZdq{}result image with marked letters\PYGZdq{});}
 
+        \PYG{k+kt}{int} \PYG{n}{hitCount} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{o}{;} \PYG{c+c1}{//count the number of detected characters}
+
+
+        \PYG{c+c1}{//now detect all matching characters}
+        \PYG{k}{for} \PYG{o}{(}\PYG{n}{Vector}\PYG{o}{\PYGZlt{}}\PYG{n}{SubImageRegion}\PYG{o}{\PYGZgt{}} \PYG{n}{subImageRegionRow} \PYG{o}{:} \PYG{n}{splittedCharacters}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+            \PYG{k}{for} \PYG{o}{(}\PYG{n}{SubImageRegion} \PYG{n}{subImageRegion} \PYG{o}{:} \PYG{n}{subImageRegionRow}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+                \PYG{k+kt}{double}\PYG{o}{[]} \PYG{n}{currFeatureArr} \PYG{o}{=} \PYG{n}{calcFeatureArr}\PYG{o}{(}\PYG{n}{subImageRegion}\PYG{o}{,} \PYG{n}{FG\PYGZus{}VAL}\PYG{o}{,} \PYG{n}{featureVect}\PYG{o}{);}
+                \PYG{k}{if} \PYG{o}{(}\PYG{n}{isMatchingChar}\PYG{o}{(}\PYG{n}{currFeatureArr}\PYG{o}{,} \PYG{n}{featureResArr}\PYG{o}{,} \PYG{n}{normArr}\PYG{o}{))} \PYG{o}{\PYGZob{}}
+                    \PYG{n}{hitCount}\PYG{o}{++;}
+
+                    \PYG{n}{binaryImgArr} \PYG{o}{=} \PYG{n}{markRegionInImage}\PYG{o}{(}\PYG{n}{binaryImgArr}\PYG{o}{,} \PYG{n}{subImageRegion}\PYG{o}{,} \PYG{n}{BG\PYGZus{}VAL}\PYG{o}{,} \PYG{n}{BG\PYGZus{}VAL} \PYG{o}{/} \PYG{l+m+mi}{2}\PYG{o}{);}
+                \PYG{o}{\PYGZcb{}}
+            \PYG{o}{\PYGZcb{}}
+        \PYG{o}{\PYGZcb{}}
+
+        \PYG{n}{IJ}\PYG{o}{.}\PYG{n+na}{log}\PYG{o}{(}\PYG{l+s}{\PYGZdq{}\PYGZsh{} of letters detected = \PYGZdq{}} \PYG{o}{+} \PYG{n}{hitCount}\PYG{o}{);}
+
+        \PYG{n}{ImageJUtility}\PYG{o}{.}\PYG{n+na}{showNewImage}\PYG{o}{(}\PYG{n}{binaryImgArr}\PYG{o}{,} \PYG{n}{width}\PYG{o}{,} \PYG{n}{height}\PYG{o}{,} \PYG{l+s}{\PYGZdq{}result image with marked letters\PYGZdq{}}\PYG{o}{);}
     \PYG{o}{\PYGZcb{}} \PYG{c+c1}{//run}
 
     \PYG{k+kd}{public} \PYG{k+kt}{int}\PYG{o}{[][]} \PYG{n+nf}{markRegionInImage}\PYG{o}{(}\PYG{k+kt}{int}\PYG{o}{[][]} \PYG{n}{inImgArr}\PYG{o}{,} \PYG{n}{SubImageRegion} \PYG{n}{imgRegion}\PYG{o}{,} \PYG{k+kt}{int} \PYG{n}{colorToReplace}\PYG{o}{,} \PYG{k+kt}{int} \PYG{n}{tgtColor}\PYG{o}{)} \PYG{o}{\PYGZob{}}
-        \PYG{c+c1}{//TODO: implementation required}
+        \PYG{k}{for} \PYG{o}{(}\PYG{k+kt}{int} \PYG{n}{x} \PYG{o}{=} \PYG{n}{imgRegion}\PYG{o}{.}\PYG{n+na}{startX}\PYG{o}{;} \PYG{n}{x} \PYG{o}{\PYGZlt{}} \PYG{n}{imgRegion}\PYG{o}{.}\PYG{n+na}{startX} \PYG{o}{+} \PYG{n}{imgRegion}\PYG{o}{.}\PYG{n+na}{width}\PYG{o}{;} \PYG{n}{x}\PYG{o}{++)} \PYG{o}{\PYGZob{}}
+            \PYG{k}{for} \PYG{o}{(}\PYG{k+kt}{int} \PYG{n}{y} \PYG{o}{=} \PYG{n}{imgRegion}\PYG{o}{.}\PYG{n+na}{startY}\PYG{o}{;} \PYG{n}{y} \PYG{o}{\PYGZlt{}} \PYG{n}{imgRegion}\PYG{o}{.}\PYG{n+na}{startY} \PYG{o}{+} \PYG{n}{imgRegion}\PYG{o}{.}\PYG{n+na}{height}\PYG{o}{;} \PYG{n}{y}\PYG{o}{++)} \PYG{o}{\PYGZob{}}
+                \PYG{k}{if} \PYG{o}{(}\PYG{n}{inImgArr}\PYG{o}{[}\PYG{n}{x}\PYG{o}{][}\PYG{n}{y}\PYG{o}{]} \PYG{o}{==} \PYG{n}{colorToReplace}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+                    \PYG{n}{inImgArr}\PYG{o}{[}\PYG{n}{x}\PYG{o}{][}\PYG{n}{y}\PYG{o}{]} \PYG{o}{=} \PYG{n}{tgtColor}\PYG{o}{;}
+                \PYG{o}{\PYGZcb{}}
+            \PYG{o}{\PYGZcb{}}
+        \PYG{o}{\PYGZcb{}}
+
         \PYG{k}{return} \PYG{n}{inImgArr}\PYG{o}{;}
     \PYG{o}{\PYGZcb{}}
 
     \PYG{k+kt}{boolean} \PYG{n+nf}{isMatchingChar}\PYG{o}{(}\PYG{k+kt}{double}\PYG{o}{[]} \PYG{n}{currFeatureArr}\PYG{o}{,} \PYG{k+kt}{double}\PYG{o}{[]} \PYG{n}{refFeatureArr}\PYG{o}{,} \PYG{k+kt}{double}\PYG{o}{[]} \PYG{n}{normFeatureArr}\PYG{o}{)} \PYG{o}{\PYGZob{}}
-        \PYG{k+kt}{double} \PYG{n}{CORR\PYGZus{}COEFFICIENT\PYGZus{}LIMIT} \PYG{o}{=} \PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{o}{;}\PYG{c+c1}{//?;}
+        \PYG{k+kt}{double} \PYG{n}{CORR\PYGZus{}COEFFICIENT\PYGZus{}LIMIT} \PYG{o}{=} \PYG{l+m+mf}{0.5}\PYG{o}{;}
 
-        \PYG{c+c1}{//TODO: implementation required}
+        \PYG{k+kt}{double} \PYG{n}{sxy} \PYG{o}{=} \PYG{l+m+mf}{0.0}\PYG{o}{;}
+        \PYG{k+kt}{double} \PYG{n}{sx} \PYG{o}{=} \PYG{l+m+mf}{0.0}\PYG{o}{;}
+        \PYG{k+kt}{double} \PYG{n}{sy} \PYG{o}{=} \PYG{l+m+mf}{0.0}\PYG{o}{;}
+        \PYG{k}{for} \PYG{o}{(}\PYG{k+kt}{int} \PYG{n}{i} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{o}{;} \PYG{n}{i} \PYG{o}{\PYGZlt{}} \PYG{n}{normFeatureArr}\PYG{o}{.}\PYG{n+na}{length}\PYG{o}{;} \PYG{n}{i}\PYG{o}{++)} \PYG{o}{\PYGZob{}}
+            \PYG{k+kt}{double} \PYG{n}{xi} \PYG{o}{=} \PYG{n}{Math}\PYG{o}{.}\PYG{n+na}{abs}\PYG{o}{(}\PYG{n}{currFeatureArr}\PYG{o}{[}\PYG{n}{i}\PYG{o}{]} \PYG{o}{\PYGZhy{}} \PYG{n}{normFeatureArr}\PYG{o}{[}\PYG{n}{i}\PYG{o}{]);} \PYG{c+c1}{// xi \PYGZhy{} x\PYGZsq{}}
+            \PYG{k+kt}{double} \PYG{n}{yi} \PYG{o}{=} \PYG{n}{Math}\PYG{o}{.}\PYG{n+na}{abs}\PYG{o}{(}\PYG{n}{refFeatureArr}\PYG{o}{[}\PYG{n}{i}\PYG{o}{]} \PYG{o}{\PYGZhy{}} \PYG{n}{normFeatureArr}\PYG{o}{[}\PYG{n}{i}\PYG{o}{]);} \PYG{c+c1}{// yi \PYGZhy{} y\PYGZsq{}}
+            \PYG{n}{sxy} \PYG{o}{+=} \PYG{n}{xi} \PYG{o}{*} \PYG{n}{yi}\PYG{o}{;}
+            \PYG{n}{sx} \PYG{o}{+=} \PYG{n}{Math}\PYG{o}{.}\PYG{n+na}{pow}\PYG{o}{(}\PYG{n}{xi}\PYG{o}{,} \PYG{l+m+mi}{2}\PYG{o}{);}
+            \PYG{n}{sy} \PYG{o}{+=} \PYG{n}{Math}\PYG{o}{.}\PYG{n+na}{pow}\PYG{o}{(}\PYG{n}{yi}\PYG{o}{,} \PYG{l+m+mi}{2}\PYG{o}{);}
 
+        \PYG{o}{\PYGZcb{}}
 
-        \PYG{k}{return} \PYG{k+kc}{false}\PYG{o}{;}
+        \PYG{k+kt}{double} \PYG{n}{correlCoeff} \PYG{o}{=} \PYG{n}{sxy} \PYG{o}{/} \PYG{o}{(}\PYG{n}{Math}\PYG{o}{.}\PYG{n+na}{sqrt}\PYG{o}{(}\PYG{n}{sx}\PYG{o}{)} \PYG{o}{*} \PYG{n}{Math}\PYG{o}{.}\PYG{n+na}{sqrt}\PYG{o}{(}\PYG{n}{sy}\PYG{o}{));}
+        \PYG{k}{return} \PYG{n}{correlCoeff} \PYG{o}{\PYGZgt{}} \PYG{n}{CORR\PYGZus{}COEFFICIENT\PYGZus{}LIMIT} \PYG{o}{||} \PYG{n}{correlCoeff} \PYG{o}{\PYGZlt{}} \PYG{o}{\PYGZhy{}}\PYG{n}{CORR\PYGZus{}COEFFICIENT\PYGZus{}LIMIT}\PYG{o}{;}
     \PYG{o}{\PYGZcb{}}
 
 
@@ -145,7 +171,6 @@
 
 
     \PYG{k+kt}{double}\PYG{o}{[]} \PYG{n+nf}{calcFeatureArr}\PYG{o}{(}\PYG{n}{SubImageRegion} \PYG{n}{region}\PYG{o}{,} \PYG{k+kt}{int} \PYG{n}{FGval}\PYG{o}{,} \PYG{n}{Vector}\PYG{o}{\PYGZlt{}}\PYG{n}{ImageFeatureBase}\PYG{o}{\PYGZgt{}} \PYG{n}{featuresToUse}\PYG{o}{)} \PYG{o}{\PYGZob{}}
-        \PYG{c+c1}{//TODO implementation required}
         \PYG{k+kt}{double}\PYG{o}{[]} \PYG{n}{featureResArr} \PYG{o}{=} \PYG{k}{new} \PYG{k+kt}{double}\PYG{o}{[}\PYG{n}{featuresToUse}\PYG{o}{.}\PYG{n+na}{size}\PYG{o}{()];}
         \PYG{k}{for} \PYG{o}{(}\PYG{k+kt}{int} \PYG{n}{i} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{o}{;} \PYG{n}{i} \PYG{o}{\PYGZlt{}} \PYG{n}{featuresToUse}\PYG{o}{.}\PYG{n+na}{size}\PYG{o}{();} \PYG{n}{i}\PYG{o}{++)} \PYG{o}{\PYGZob{}}
             \PYG{n}{featureResArr}\PYG{o}{[}\PYG{n}{i}\PYG{o}{]} \PYG{o}{=} \PYG{n}{featuresToUse}\PYG{o}{.}\PYG{n+na}{get}\PYG{o}{(}\PYG{n}{i}\PYG{o}{).}\PYG{n+na}{CalcFeatureVal}\PYG{o}{(}\PYG{n}{region}\PYG{o}{,} \PYG{n}{FGval}\PYG{o}{);}
@@ -157,7 +182,36 @@
     \PYG{k+kt}{double}\PYG{o}{[]} \PYG{n+nf}{calculateNormArr}\PYG{o}{(}\PYG{n}{Vector}\PYG{o}{\PYGZlt{}}\PYG{n}{Vector}\PYG{o}{\PYGZlt{}}\PYG{n}{SubImageRegion}\PYG{o}{\PYGZgt{}\PYGZgt{}} \PYG{n}{inputRegions}\PYG{o}{,} \PYG{k+kt}{int} \PYG{n}{FGval}\PYG{o}{,} \PYG{n}{Vector}\PYG{o}{\PYGZlt{}}\PYG{n}{ImageFeatureBase}\PYG{o}{\PYGZgt{}} \PYG{n}{featuresToUse}\PYG{o}{)} \PYG{o}{\PYGZob{}}
         \PYG{c+c1}{//calculate the average per feature to allow for normalization}
         \PYG{k+kt}{double}\PYG{o}{[]} \PYG{n}{returnArr} \PYG{o}{=} \PYG{k}{new} \PYG{k+kt}{double}\PYG{o}{[}\PYG{n}{featuresToUse}\PYG{o}{.}\PYG{n+na}{size}\PYG{o}{()];}
-        \PYG{c+c1}{//TODO implementation required}
+        \PYG{k}{for} \PYG{o}{(}\PYG{k+kt}{int} \PYG{n}{i} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{o}{;} \PYG{n}{i} \PYG{o}{\PYGZlt{}} \PYG{n}{featuresToUse}\PYG{o}{.}\PYG{n+na}{size}\PYG{o}{();} \PYG{n}{i}\PYG{o}{++)} \PYG{o}{\PYGZob{}}
+            \PYG{k+kt}{double} \PYG{n}{avg} \PYG{o}{=} \PYG{l+m+mf}{0.0}\PYG{o}{;}
+            \PYG{k+kt}{int} \PYG{n}{count} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{o}{;}
+            \PYG{k}{for} \PYG{o}{(}\PYG{n}{Vector}\PYG{o}{\PYGZlt{}}\PYG{n}{SubImageRegion}\PYG{o}{\PYGZgt{}} \PYG{n}{row} \PYG{o}{:} \PYG{n}{inputRegions}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+                \PYG{k}{for} \PYG{o}{(}\PYG{n}{SubImageRegion} \PYG{n}{image} \PYG{o}{:} \PYG{n}{row}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+                    \PYG{n}{avg} \PYG{o}{+=} \PYG{n}{featuresToUse}\PYG{o}{.}\PYG{n+na}{get}\PYG{o}{(}\PYG{n}{i}\PYG{o}{).}\PYG{n+na}{CalcFeatureVal}\PYG{o}{(}\PYG{n}{image}\PYG{o}{,} \PYG{n}{FGval}\PYG{o}{);}
+                    \PYG{n}{count}\PYG{o}{++;}
+                \PYG{o}{\PYGZcb{}}
+            \PYG{o}{\PYGZcb{}}
+            \PYG{n}{avg} \PYG{o}{/=} \PYG{n}{count}\PYG{o}{;}
+            \PYG{n}{returnArr}\PYG{o}{[}\PYG{n}{i}\PYG{o}{]} \PYG{o}{=} \PYG{n}{avg}\PYG{o}{;}
+        \PYG{o}{\PYGZcb{}}
+
+        \PYG{k+kt}{double} \PYG{n}{min} \PYG{o}{=} \PYG{n}{Double}\PYG{o}{.}\PYG{n+na}{MAX\PYGZus{}VALUE}\PYG{o}{;}
+        \PYG{k+kt}{double} \PYG{n}{max} \PYG{o}{=} \PYG{n}{Double}\PYG{o}{.}\PYG{n+na}{MIN\PYGZus{}VALUE}\PYG{o}{;}
+        \PYG{k+kt}{double} \PYG{n}{mean} \PYG{o}{=} \PYG{l+m+mf}{0.0}\PYG{o}{;}
+        \PYG{k}{for}\PYG{o}{(}\PYG{k+kt}{int} \PYG{n}{i} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{o}{;} \PYG{n}{i} \PYG{o}{\PYGZlt{}} \PYG{n}{returnArr}\PYG{o}{.}\PYG{n+na}{length}\PYG{o}{;} \PYG{n}{i}\PYG{o}{++)\PYGZob{}}
+            \PYG{k}{if}\PYG{o}{(}\PYG{n}{returnArr}\PYG{o}{[}\PYG{n}{i}\PYG{o}{]} \PYG{o}{\PYGZgt{}} \PYG{n}{max}\PYG{o}{)\PYGZob{}}
+                \PYG{n}{max} \PYG{o}{=} \PYG{n}{returnArr}\PYG{o}{[}\PYG{n}{i}\PYG{o}{];}
+            \PYG{o}{\PYGZcb{}}
+            \PYG{k}{if}\PYG{o}{(}\PYG{n}{returnArr}\PYG{o}{[}\PYG{n}{i}\PYG{o}{]} \PYG{o}{\PYGZlt{}} \PYG{n}{min}\PYG{o}{)\PYGZob{}}
+                \PYG{n}{min} \PYG{o}{=} \PYG{n}{returnArr}\PYG{o}{[}\PYG{n}{i}\PYG{o}{];}
+            \PYG{o}{\PYGZcb{}}
+            \PYG{n}{mean} \PYG{o}{+=} \PYG{n}{returnArr}\PYG{o}{[}\PYG{n}{i}\PYG{o}{];}
+        \PYG{o}{\PYGZcb{}}
+        \PYG{n}{mean} \PYG{o}{/=} \PYG{n}{returnArr}\PYG{o}{.}\PYG{n+na}{length}\PYG{o}{;}
+
+        \PYG{k}{for}\PYG{o}{(}\PYG{k+kt}{int} \PYG{n}{i} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{o}{;} \PYG{n}{i} \PYG{o}{\PYGZlt{}} \PYG{n}{returnArr}\PYG{o}{.}\PYG{n+na}{length}\PYG{o}{;} \PYG{n}{i}\PYG{o}{++)\PYGZob{}}
+            \PYG{n}{returnArr}\PYG{o}{[}\PYG{n}{i}\PYG{o}{]} \PYG{o}{=} \PYG{o}{(}\PYG{n}{returnArr}\PYG{o}{[}\PYG{n}{i}\PYG{o}{]} \PYG{o}{\PYGZhy{}} \PYG{n}{mean}\PYG{o}{)} \PYG{o}{/} \PYG{o}{(}\PYG{n}{max} \PYG{o}{\PYGZhy{}} \PYG{n}{min}\PYG{o}{);}
+        \PYG{o}{\PYGZcb{}}
 
         \PYG{k}{return} \PYG{n}{returnArr}\PYG{o}{;}
     \PYG{o}{\PYGZcb{}}
@@ -175,7 +229,7 @@
                 \PYG{c+c1}{// if the value is a FG\PYGZus{}val set start points}
                 \PYG{c+c1}{// go on until there is a completely white line}
                 \PYG{k}{if} \PYG{o}{(}\PYG{n}{inImg}\PYG{o}{[}\PYG{n}{x}\PYG{o}{][}\PYG{n}{y}\PYG{o}{]} \PYG{o}{==} \PYG{n}{FG\PYGZus{}val}\PYG{o}{)} \PYG{o}{\PYGZob{}}
-                    \PYG{k}{if} \PYG{o}{(}\PYG{n}{foundFG} \PYG{o}{==} \PYG{k+kc}{false}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+                    \PYG{k}{if} \PYG{o}{(!}\PYG{n}{foundFG}\PYG{o}{)} \PYG{o}{\PYGZob{}}
                         \PYG{n}{startY} \PYG{o}{=} \PYG{n}{y}\PYG{o}{;}
                     \PYG{o}{\PYGZcb{}}
                     \PYG{n}{foundFG} \PYG{o}{=} \PYG{k+kc}{true}\PYG{o}{;}
@@ -227,7 +281,7 @@
 
         \PYG{k}{return} \PYG{n}{returnCharArr}\PYG{o}{;}
     \PYG{o}{\PYGZcb{}}
-    
+
     \PYG{k+kt}{void} \PYG{n+nf}{showAbout}\PYG{o}{()} \PYG{o}{\PYGZob{}}
         \PYG{n}{IJ}\PYG{o}{.}\PYG{n+na}{showMessage}\PYG{o}{(}\PYG{l+s}{\PYGZdq{}About Template\PYGZus{}...\PYGZdq{}}\PYG{o}{,}
                 \PYG{l+s}{\PYGZdq{}this is a RegionGrowing\PYGZus{} template\PYGZbs{}n\PYGZdq{}}\PYG{o}{);}
@@ -308,26 +362,26 @@
 
 
     \PYG{k+kd}{private} \PYG{k+kt}{double} \PYG{n+nf}{calcDistance}\PYG{o}{(}\PYG{k+kt}{int} \PYG{n}{x1}\PYG{o}{,} \PYG{k+kt}{int} \PYG{n}{y1}\PYG{o}{,} \PYG{k+kt}{int} \PYG{n}{x2}\PYG{o}{,} \PYG{k+kt}{int} \PYG{n}{y2}\PYG{o}{)} \PYG{o}{\PYGZob{}}
-    	\PYG{k}{return} \PYG{n}{Math}\PYG{o}{.}\PYG{n+na}{sqrt}\PYG{o}{(}\PYG{n}{Math}\PYG{o}{.}\PYG{n+na}{pow}\PYG{o}{(}\PYG{n}{x2} \PYG{o}{\PYGZhy{}} \PYG{n}{x1}\PYG{o}{,} \PYG{l+m+mi}{2}\PYG{o}{)} \PYG{o}{+} \PYG{n}{Math}\PYG{o}{.}\PYG{n+na}{pow}\PYG{o}{(}\PYG{n}{y2} \PYG{o}{\PYGZhy{}} \PYG{n}{y1}\PYG{o}{,} \PYG{l+m+mi}{2}\PYG{o}{));}
+        \PYG{k}{return} \PYG{n}{Math}\PYG{o}{.}\PYG{n+na}{sqrt}\PYG{o}{(}\PYG{n}{Math}\PYG{o}{.}\PYG{n+na}{pow}\PYG{o}{(}\PYG{n}{x2} \PYG{o}{\PYGZhy{}} \PYG{n}{x1}\PYG{o}{,} \PYG{l+m+mi}{2}\PYG{o}{)} \PYG{o}{+} \PYG{n}{Math}\PYG{o}{.}\PYG{n+na}{pow}\PYG{o}{(}\PYG{n}{y2} \PYG{o}{\PYGZhy{}} \PYG{n}{y1}\PYG{o}{,} \PYG{l+m+mi}{2}\PYG{o}{));}
     \PYG{o}{\PYGZcb{}}
-    
+
     \PYG{k+kd}{private} \PYG{n}{Point} \PYG{n+nf}{calcCentroid}\PYG{o}{(}\PYG{n}{SubImageRegion} \PYG{n}{imgRegion}\PYG{o}{,} \PYG{k+kt}{int} \PYG{n}{FG\PYGZus{}val}\PYG{o}{)} \PYG{o}{\PYGZob{}}
-    	\PYG{c+c1}{// https://ask2mujahed.wordpress.com/category/research\PYGZhy{}topics/ocr/}
-    	
-    	\PYG{k+kt}{int} \PYG{n}{centroidX} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{o}{;}
-    	\PYG{k+kt}{int} \PYG{n}{centroidY} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{o}{;}
-    	\PYG{k+kt}{int} \PYG{n}{cnt} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{o}{;}
-    	\PYG{k}{for}\PYG{o}{(}\PYG{k+kt}{int} \PYG{n}{x} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{o}{;} \PYG{n}{x} \PYG{o}{\PYGZlt{}} \PYG{n}{imgRegion}\PYG{o}{.}\PYG{n+na}{width}\PYG{o}{;} \PYG{n}{x}\PYG{o}{++)} \PYG{o}{\PYGZob{}}
-    		\PYG{k}{for}\PYG{o}{(}\PYG{k+kt}{int} \PYG{n}{y} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{o}{;} \PYG{n}{y} \PYG{o}{\PYGZlt{}} \PYG{n}{imgRegion}\PYG{o}{.}\PYG{n+na}{height}\PYG{o}{;} \PYG{n}{y}\PYG{o}{++)} \PYG{o}{\PYGZob{}}
-    			\PYG{k}{if}\PYG{o}{(}\PYG{n}{imgRegion}\PYG{o}{.}\PYG{n+na}{subImgArr}\PYG{o}{[}\PYG{n}{x}\PYG{o}{][}\PYG{n}{y}\PYG{o}{]} \PYG{o}{==} \PYG{n}{FG\PYGZus{}val}\PYG{o}{)} \PYG{o}{\PYGZob{}}
-    				\PYG{n}{centroidX} \PYG{o}{+=} \PYG{n}{x}\PYG{o}{;}
-    				\PYG{n}{centroidY} \PYG{o}{+=} \PYG{n}{y}\PYG{o}{;}
-    				\PYG{n}{cnt}\PYG{o}{++;}
-    			\PYG{o}{\PYGZcb{}}
-    		\PYG{o}{\PYGZcb{}}
-    	\PYG{o}{\PYGZcb{}}
-    	
-    	\PYG{k}{return} \PYG{k}{new} \PYG{n}{Point}\PYG{o}{(}\PYG{n}{centroidX} \PYG{o}{/} \PYG{n}{cnt}\PYG{o}{,} \PYG{n}{centroidY} \PYG{o}{/} \PYG{n}{cnt}\PYG{o}{);}
+        \PYG{c+c1}{// https://ask2mujahed.wordpress.com/category/research\PYGZhy{}topics/ocr/}
+
+        \PYG{k+kt}{int} \PYG{n}{centroidX} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{o}{;}
+        \PYG{k+kt}{int} \PYG{n}{centroidY} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{o}{;}
+        \PYG{k+kt}{int} \PYG{n}{cnt} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{o}{;}
+        \PYG{k}{for} \PYG{o}{(}\PYG{k+kt}{int} \PYG{n}{x} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{o}{;} \PYG{n}{x} \PYG{o}{\PYGZlt{}} \PYG{n}{imgRegion}\PYG{o}{.}\PYG{n+na}{width}\PYG{o}{;} \PYG{n}{x}\PYG{o}{++)} \PYG{o}{\PYGZob{}}
+            \PYG{k}{for} \PYG{o}{(}\PYG{k+kt}{int} \PYG{n}{y} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{o}{;} \PYG{n}{y} \PYG{o}{\PYGZlt{}} \PYG{n}{imgRegion}\PYG{o}{.}\PYG{n+na}{height}\PYG{o}{;} \PYG{n}{y}\PYG{o}{++)} \PYG{o}{\PYGZob{}}
+                \PYG{k}{if} \PYG{o}{(}\PYG{n}{imgRegion}\PYG{o}{.}\PYG{n+na}{subImgArr}\PYG{o}{[}\PYG{n}{x}\PYG{o}{][}\PYG{n}{y}\PYG{o}{]} \PYG{o}{==} \PYG{n}{FG\PYGZus{}val}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+                    \PYG{n}{centroidX} \PYG{o}{+=} \PYG{n}{x}\PYG{o}{;}
+                    \PYG{n}{centroidY} \PYG{o}{+=} \PYG{n}{y}\PYG{o}{;}
+                    \PYG{n}{cnt}\PYG{o}{++;}
+                \PYG{o}{\PYGZcb{}}
+            \PYG{o}{\PYGZcb{}}
+        \PYG{o}{\PYGZcb{}}
+
+        \PYG{k}{return} \PYG{k}{new} \PYG{n}{Point}\PYG{o}{(}\PYG{n}{centroidX} \PYG{o}{/} \PYG{n}{cnt}\PYG{o}{,} \PYG{n}{centroidY} \PYG{o}{/} \PYG{n}{cnt}\PYG{o}{);}
     \PYG{o}{\PYGZcb{}}
 
     \PYG{k+kd}{class} \PYG{n+nc}{ImageFeatureF\PYGZus{}AvgDistanceCentroide} \PYG{k+kd}{extends} \PYG{n}{ImageFeatureBase} \PYG{o}{\PYGZob{}}
@@ -337,23 +391,23 @@
         \PYG{o}{\PYGZcb{}}
 
         \PYG{k+kd}{public} \PYG{k+kt}{double} \PYG{n+nf}{CalcFeatureVal}\PYG{o}{(}\PYG{n}{SubImageRegion} \PYG{n}{imgRegion}\PYG{o}{,} \PYG{k+kt}{int} \PYG{n}{FG\PYGZus{}val}\PYG{o}{)} \PYG{o}{\PYGZob{}}
-        	\PYG{n}{Point} \PYG{n}{centroid} \PYG{o}{=} \PYG{n}{calcCentroid}\PYG{o}{(}\PYG{n}{imgRegion}\PYG{o}{,} \PYG{n}{FG\PYGZus{}val}\PYG{o}{);}
-        	
-        	\PYG{k+kt}{double} \PYG{n}{avgDist} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{o}{;}
-        	\PYG{k+kt}{int} \PYG{n}{cnt} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{o}{;}
-        	\PYG{k}{for}\PYG{o}{(}\PYG{k+kt}{int} \PYG{n}{x} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{o}{;} \PYG{n}{x} \PYG{o}{\PYGZlt{}} \PYG{n}{imgRegion}\PYG{o}{.}\PYG{n+na}{width}\PYG{o}{;} \PYG{n}{x}\PYG{o}{++)} \PYG{o}{\PYGZob{}}
-        		\PYG{k}{for}\PYG{o}{(}\PYG{k+kt}{int} \PYG{n}{y} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{o}{;} \PYG{n}{y} \PYG{o}{\PYGZlt{}} \PYG{n}{imgRegion}\PYG{o}{.}\PYG{n+na}{height}\PYG{o}{;} \PYG{n}{y}\PYG{o}{++)} \PYG{o}{\PYGZob{}}
-        			\PYG{k}{if}\PYG{o}{(}\PYG{n}{imgRegion}\PYG{o}{.}\PYG{n+na}{subImgArr}\PYG{o}{[}\PYG{n}{x}\PYG{o}{][}\PYG{n}{y}\PYG{o}{]} \PYG{o}{==} \PYG{n}{FG\PYGZus{}val}\PYG{o}{)} \PYG{o}{\PYGZob{}}
-        				\PYG{n}{avgDist} \PYG{o}{+=} \PYG{n}{calcDistance}\PYG{o}{(}\PYG{n}{centroid}\PYG{o}{.}\PYG{n+na}{x}\PYG{o}{,} \PYG{n}{centroid}\PYG{o}{.}\PYG{n+na}{y}\PYG{o}{,} \PYG{n}{x}\PYG{o}{,} \PYG{n}{y}\PYG{o}{);}
-        				\PYG{n}{cnt}\PYG{o}{++;}
-        			\PYG{o}{\PYGZcb{}}
-        		\PYG{o}{\PYGZcb{}}
-        	\PYG{o}{\PYGZcb{}}
-        	
-        	\PYG{k}{return} \PYG{n}{avgDist} \PYG{o}{/} \PYG{n}{cnt}\PYG{o}{;}
+            \PYG{n}{Point} \PYG{n}{centroid} \PYG{o}{=} \PYG{n}{calcCentroid}\PYG{o}{(}\PYG{n}{imgRegion}\PYG{o}{,} \PYG{n}{FG\PYGZus{}val}\PYG{o}{);}
+
+            \PYG{k+kt}{double} \PYG{n}{avgDist} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{o}{;}
+            \PYG{k+kt}{int} \PYG{n}{cnt} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{o}{;}
+            \PYG{k}{for} \PYG{o}{(}\PYG{k+kt}{int} \PYG{n}{x} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{o}{;} \PYG{n}{x} \PYG{o}{\PYGZlt{}} \PYG{n}{imgRegion}\PYG{o}{.}\PYG{n+na}{width}\PYG{o}{;} \PYG{n}{x}\PYG{o}{++)} \PYG{o}{\PYGZob{}}
+                \PYG{k}{for} \PYG{o}{(}\PYG{k+kt}{int} \PYG{n}{y} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{o}{;} \PYG{n}{y} \PYG{o}{\PYGZlt{}} \PYG{n}{imgRegion}\PYG{o}{.}\PYG{n+na}{height}\PYG{o}{;} \PYG{n}{y}\PYG{o}{++)} \PYG{o}{\PYGZob{}}
+                    \PYG{k}{if} \PYG{o}{(}\PYG{n}{imgRegion}\PYG{o}{.}\PYG{n+na}{subImgArr}\PYG{o}{[}\PYG{n}{x}\PYG{o}{][}\PYG{n}{y}\PYG{o}{]} \PYG{o}{==} \PYG{n}{FG\PYGZus{}val}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+                        \PYG{n}{avgDist} \PYG{o}{+=} \PYG{n}{calcDistance}\PYG{o}{(}\PYG{n}{centroid}\PYG{o}{.}\PYG{n+na}{x}\PYG{o}{,} \PYG{n}{centroid}\PYG{o}{.}\PYG{n+na}{y}\PYG{o}{,} \PYG{n}{x}\PYG{o}{,} \PYG{n}{y}\PYG{o}{);}
+                        \PYG{n}{cnt}\PYG{o}{++;}
+                    \PYG{o}{\PYGZcb{}}
+                \PYG{o}{\PYGZcb{}}
+            \PYG{o}{\PYGZcb{}}
+
+            \PYG{k}{return} \PYG{n}{avgDist} \PYG{o}{/} \PYG{n}{cnt}\PYG{o}{;}
         \PYG{o}{\PYGZcb{}}
     \PYG{o}{\PYGZcb{}}
-    
+
     \PYG{k+kd}{class} \PYG{n+nc}{ImageFeatureF\PYGZus{}MaxDistanceCentroide} \PYG{k+kd}{extends} \PYG{n}{ImageFeatureBase} \PYG{o}{\PYGZob{}}
 
         \PYG{k+kd}{public} \PYG{n+nf}{ImageFeatureF\PYGZus{}MaxDistanceCentroide}\PYG{o}{()} \PYG{o}{\PYGZob{}}
@@ -361,21 +415,21 @@
         \PYG{o}{\PYGZcb{}}
 
         \PYG{k+kd}{public} \PYG{k+kt}{double} \PYG{n+nf}{CalcFeatureVal}\PYG{o}{(}\PYG{n}{SubImageRegion} \PYG{n}{imgRegion}\PYG{o}{,} \PYG{k+kt}{int} \PYG{n}{FG\PYGZus{}val}\PYG{o}{)} \PYG{o}{\PYGZob{}}
-        	\PYG{n}{Point} \PYG{n}{centroid} \PYG{o}{=} \PYG{n}{calcCentroid}\PYG{o}{(}\PYG{n}{imgRegion}\PYG{o}{,} \PYG{n}{FG\PYGZus{}val}\PYG{o}{);}
-        	
-        	\PYG{k+kt}{double} \PYG{n}{maxDist} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{o}{;}
-        	\PYG{k}{for}\PYG{o}{(}\PYG{k+kt}{int} \PYG{n}{x} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{o}{;} \PYG{n}{x} \PYG{o}{\PYGZlt{}} \PYG{n}{imgRegion}\PYG{o}{.}\PYG{n+na}{width}\PYG{o}{;} \PYG{n}{x}\PYG{o}{++)} \PYG{o}{\PYGZob{}}
-        		\PYG{k}{for}\PYG{o}{(}\PYG{k+kt}{int} \PYG{n}{y} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{o}{;} \PYG{n}{y} \PYG{o}{\PYGZlt{}} \PYG{n}{imgRegion}\PYG{o}{.}\PYG{n+na}{height}\PYG{o}{;} \PYG{n}{y}\PYG{o}{++)} \PYG{o}{\PYGZob{}}
-        			\PYG{k}{if}\PYG{o}{(}\PYG{n}{imgRegion}\PYG{o}{.}\PYG{n+na}{subImgArr}\PYG{o}{[}\PYG{n}{x}\PYG{o}{][}\PYG{n}{y}\PYG{o}{]} \PYG{o}{==} \PYG{n}{FG\PYGZus{}val}\PYG{o}{)} \PYG{o}{\PYGZob{}}
-        				\PYG{k+kt}{double} \PYG{n}{actDist} \PYG{o}{=} \PYG{n}{calcDistance}\PYG{o}{(}\PYG{n}{centroid}\PYG{o}{.}\PYG{n+na}{x}\PYG{o}{,} \PYG{n}{centroid}\PYG{o}{.}\PYG{n+na}{y}\PYG{o}{,} \PYG{n}{x}\PYG{o}{,} \PYG{n}{y}\PYG{o}{);}
-            			\PYG{k}{if}\PYG{o}{(}\PYG{n}{actDist} \PYG{o}{\PYGZgt{}} \PYG{n}{maxDist}\PYG{o}{)} \PYG{o}{\PYGZob{}}
-            				\PYG{n}{maxDist} \PYG{o}{=} \PYG{n}{actDist}\PYG{o}{;}
-            			\PYG{o}{\PYGZcb{}}	
-        			\PYG{o}{\PYGZcb{}}
-        		\PYG{o}{\PYGZcb{}}
-        	\PYG{o}{\PYGZcb{}}
-        	
-        	\PYG{k}{return} \PYG{n}{maxDist}\PYG{o}{;}
+            \PYG{n}{Point} \PYG{n}{centroid} \PYG{o}{=} \PYG{n}{calcCentroid}\PYG{o}{(}\PYG{n}{imgRegion}\PYG{o}{,} \PYG{n}{FG\PYGZus{}val}\PYG{o}{);}
+
+            \PYG{k+kt}{double} \PYG{n}{maxDist} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{o}{;}
+            \PYG{k}{for} \PYG{o}{(}\PYG{k+kt}{int} \PYG{n}{x} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{o}{;} \PYG{n}{x} \PYG{o}{\PYGZlt{}} \PYG{n}{imgRegion}\PYG{o}{.}\PYG{n+na}{width}\PYG{o}{;} \PYG{n}{x}\PYG{o}{++)} \PYG{o}{\PYGZob{}}
+                \PYG{k}{for} \PYG{o}{(}\PYG{k+kt}{int} \PYG{n}{y} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{o}{;} \PYG{n}{y} \PYG{o}{\PYGZlt{}} \PYG{n}{imgRegion}\PYG{o}{.}\PYG{n+na}{height}\PYG{o}{;} \PYG{n}{y}\PYG{o}{++)} \PYG{o}{\PYGZob{}}
+                    \PYG{k}{if} \PYG{o}{(}\PYG{n}{imgRegion}\PYG{o}{.}\PYG{n+na}{subImgArr}\PYG{o}{[}\PYG{n}{x}\PYG{o}{][}\PYG{n}{y}\PYG{o}{]} \PYG{o}{==} \PYG{n}{FG\PYGZus{}val}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+                        \PYG{k+kt}{double} \PYG{n}{actDist} \PYG{o}{=} \PYG{n}{calcDistance}\PYG{o}{(}\PYG{n}{centroid}\PYG{o}{.}\PYG{n+na}{x}\PYG{o}{,} \PYG{n}{centroid}\PYG{o}{.}\PYG{n+na}{y}\PYG{o}{,} \PYG{n}{x}\PYG{o}{,} \PYG{n}{y}\PYG{o}{);}
+                        \PYG{k}{if} \PYG{o}{(}\PYG{n}{actDist} \PYG{o}{\PYGZgt{}} \PYG{n}{maxDist}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+                            \PYG{n}{maxDist} \PYG{o}{=} \PYG{n}{actDist}\PYG{o}{;}
+                        \PYG{o}{\PYGZcb{}}
+                    \PYG{o}{\PYGZcb{}}
+                \PYG{o}{\PYGZcb{}}
+            \PYG{o}{\PYGZcb{}}
+
+            \PYG{k}{return} \PYG{n}{maxDist}\PYG{o}{;}
         \PYG{o}{\PYGZcb{}}
     \PYG{o}{\PYGZcb{}}
 
@@ -386,20 +440,20 @@
         \PYG{o}{\PYGZcb{}}
 
         \PYG{k+kd}{public} \PYG{k+kt}{double} \PYG{n+nf}{CalcFeatureVal}\PYG{o}{(}\PYG{n}{SubImageRegion} \PYG{n}{imgRegion}\PYG{o}{,} \PYG{k+kt}{int} \PYG{n}{FG\PYGZus{}val}\PYG{o}{)} \PYG{o}{\PYGZob{}}
-        	\PYG{n}{Point} \PYG{n}{centroid} \PYG{o}{=} \PYG{n}{calcCentroid}\PYG{o}{(}\PYG{n}{imgRegion}\PYG{o}{,} \PYG{n}{FG\PYGZus{}val}\PYG{o}{);}
-        	
-        	\PYG{k+kt}{double} \PYG{n}{minDist} \PYG{o}{=} \PYG{n}{Double}\PYG{o}{.}\PYG{n+na}{MAX\PYGZus{}VALUE}\PYG{o}{;}
-        	\PYG{k}{for}\PYG{o}{(}\PYG{k+kt}{int} \PYG{n}{x} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{o}{;} \PYG{n}{x} \PYG{o}{\PYGZlt{}} \PYG{n}{imgRegion}\PYG{o}{.}\PYG{n+na}{width}\PYG{o}{;} \PYG{n}{x}\PYG{o}{++)} \PYG{o}{\PYGZob{}}
-        		\PYG{k}{for}\PYG{o}{(}\PYG{k+kt}{int} \PYG{n}{y} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{o}{;} \PYG{n}{y} \PYG{o}{\PYGZlt{}} \PYG{n}{imgRegion}\PYG{o}{.}\PYG{n+na}{height}\PYG{o}{;} \PYG{n}{y}\PYG{o}{++)} \PYG{o}{\PYGZob{}}
-        			\PYG{k}{if}\PYG{o}{(}\PYG{n}{imgRegion}\PYG{o}{.}\PYG{n+na}{subImgArr}\PYG{o}{[}\PYG{n}{x}\PYG{o}{][}\PYG{n}{y}\PYG{o}{]} \PYG{o}{==} \PYG{n}{FG\PYGZus{}val}\PYG{o}{)} \PYG{o}{\PYGZob{}}
-        				\PYG{k+kt}{double} \PYG{n}{actDist} \PYG{o}{=} \PYG{n}{calcDistance}\PYG{o}{(}\PYG{n}{centroid}\PYG{o}{.}\PYG{n+na}{x}\PYG{o}{,} \PYG{n}{centroid}\PYG{o}{.}\PYG{n+na}{y}\PYG{o}{,} \PYG{n}{x}\PYG{o}{,} \PYG{n}{y}\PYG{o}{);}
-        				\PYG{k}{if}\PYG{o}{(}\PYG{n}{actDist} \PYG{o}{\PYGZlt{}} \PYG{n}{minDist}\PYG{o}{)} \PYG{o}{\PYGZob{}}
-        					\PYG{n}{minDist} \PYG{o}{=} \PYG{n}{actDist}\PYG{o}{;}
-        				\PYG{o}{\PYGZcb{}}
-        			\PYG{o}{\PYGZcb{}}
-        		\PYG{o}{\PYGZcb{}}
-        	\PYG{o}{\PYGZcb{}}
-        	
+            \PYG{n}{Point} \PYG{n}{centroid} \PYG{o}{=} \PYG{n}{calcCentroid}\PYG{o}{(}\PYG{n}{imgRegion}\PYG{o}{,} \PYG{n}{FG\PYGZus{}val}\PYG{o}{);}
+
+            \PYG{k+kt}{double} \PYG{n}{minDist} \PYG{o}{=} \PYG{n}{Double}\PYG{o}{.}\PYG{n+na}{MAX\PYGZus{}VALUE}\PYG{o}{;}
+            \PYG{k}{for} \PYG{o}{(}\PYG{k+kt}{int} \PYG{n}{x} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{o}{;} \PYG{n}{x} \PYG{o}{\PYGZlt{}} \PYG{n}{imgRegion}\PYG{o}{.}\PYG{n+na}{width}\PYG{o}{;} \PYG{n}{x}\PYG{o}{++)} \PYG{o}{\PYGZob{}}
+                \PYG{k}{for} \PYG{o}{(}\PYG{k+kt}{int} \PYG{n}{y} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{o}{;} \PYG{n}{y} \PYG{o}{\PYGZlt{}} \PYG{n}{imgRegion}\PYG{o}{.}\PYG{n+na}{height}\PYG{o}{;} \PYG{n}{y}\PYG{o}{++)} \PYG{o}{\PYGZob{}}
+                    \PYG{k}{if} \PYG{o}{(}\PYG{n}{imgRegion}\PYG{o}{.}\PYG{n+na}{subImgArr}\PYG{o}{[}\PYG{n}{x}\PYG{o}{][}\PYG{n}{y}\PYG{o}{]} \PYG{o}{==} \PYG{n}{FG\PYGZus{}val}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+                        \PYG{k+kt}{double} \PYG{n}{actDist} \PYG{o}{=} \PYG{n}{calcDistance}\PYG{o}{(}\PYG{n}{centroid}\PYG{o}{.}\PYG{n+na}{x}\PYG{o}{,} \PYG{n}{centroid}\PYG{o}{.}\PYG{n+na}{y}\PYG{o}{,} \PYG{n}{x}\PYG{o}{,} \PYG{n}{y}\PYG{o}{);}
+                        \PYG{k}{if} \PYG{o}{(}\PYG{n}{actDist} \PYG{o}{\PYGZlt{}} \PYG{n}{minDist}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+                            \PYG{n}{minDist} \PYG{o}{=} \PYG{n}{actDist}\PYG{o}{;}
+                        \PYG{o}{\PYGZcb{}}
+                    \PYG{o}{\PYGZcb{}}
+                \PYG{o}{\PYGZcb{}}
+            \PYG{o}{\PYGZcb{}}
+
             \PYG{k}{return} \PYG{n}{minDist}\PYG{o}{;}
         \PYG{o}{\PYGZcb{}}
 
@@ -407,30 +461,30 @@
 
     \PYG{k+kd}{class} \PYG{n+nc}{ImageFeatureF\PYGZus{}Circularity} \PYG{k+kd}{extends} \PYG{n}{ImageFeatureBase} \PYG{o}{\PYGZob{}}
 
-    	\PYG{n}{ImageStatistics} \PYG{n}{stats}\PYG{o}{;}
-    	\PYG{n}{Analyzer} \PYG{n}{analyzer}\PYG{o}{;}
-    	
+        \PYG{n}{ImageStatistics} \PYG{n}{stats}\PYG{o}{;}
+        \PYG{n}{Analyzer} \PYG{n}{analyzer}\PYG{o}{;}
+
         \PYG{k+kd}{public} \PYG{n+nf}{ImageFeatureF\PYGZus{}Circularity}\PYG{o}{()} \PYG{o}{\PYGZob{}}
             \PYG{k}{this}\PYG{o}{.}\PYG{n+na}{description} \PYG{o}{=} \PYG{l+s}{\PYGZdq{}Circularitaet\PYGZdq{}}\PYG{o}{;}
         \PYG{o}{\PYGZcb{}}
 
-		\PYG{k+kd}{public} \PYG{k+kt}{double} \PYG{n+nf}{CalcFeatureVal}\PYG{o}{(}\PYG{n}{SubImageRegion} \PYG{n}{imgRegion}\PYG{o}{,} \PYG{k+kt}{int} \PYG{n}{FG\PYGZus{}val}\PYG{o}{)} \PYG{o}{\PYGZob{}}
-        	\PYG{n}{Roi} \PYG{n}{roi} \PYG{o}{=} \PYG{k}{new} \PYG{n}{Roi}\PYG{o}{(}\PYG{n}{imgRegion}\PYG{o}{.}\PYG{n+na}{startX}\PYG{o}{,} \PYG{n}{imgRegion}\PYG{o}{.}\PYG{n+na}{startY}\PYG{o}{,} \PYG{n}{imgRegion}\PYG{o}{.}\PYG{n+na}{width}\PYG{o}{,} \PYG{n}{imgRegion}\PYG{o}{.}\PYG{n+na}{height}\PYG{o}{);}
-    		\PYG{n}{ip}\PYG{o}{.}\PYG{n+na}{setRoi}\PYG{o}{(}\PYG{n}{roi}\PYG{o}{);}
+        \PYG{k+kd}{public} \PYG{k+kt}{double} \PYG{n+nf}{CalcFeatureVal}\PYG{o}{(}\PYG{n}{SubImageRegion} \PYG{n}{imgRegion}\PYG{o}{,} \PYG{k+kt}{int} \PYG{n}{FG\PYGZus{}val}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+            \PYG{n}{Roi} \PYG{n}{roi} \PYG{o}{=} \PYG{k}{new} \PYG{n}{Roi}\PYG{o}{(}\PYG{n}{imgRegion}\PYG{o}{.}\PYG{n+na}{startX}\PYG{o}{,} \PYG{n}{imgRegion}\PYG{o}{.}\PYG{n+na}{startY}\PYG{o}{,} \PYG{n}{imgRegion}\PYG{o}{.}\PYG{n+na}{width}\PYG{o}{,} \PYG{n}{imgRegion}\PYG{o}{.}\PYG{n+na}{height}\PYG{o}{);}
+            \PYG{n}{ip}\PYG{o}{.}\PYG{n+na}{setRoi}\PYG{o}{(}\PYG{n}{roi}\PYG{o}{);}
 
-    		\PYG{k+kt}{int} \PYG{n}{measurements} \PYG{o}{=} \PYG{n}{Analyzer}\PYG{o}{.}\PYG{n+na}{getMeasurements}\PYG{o}{();}
-    		\PYG{n}{measurements} \PYG{o}{|=} \PYG{n}{Measurements}\PYG{o}{.}\PYG{n+na}{AREA} \PYG{o}{+} \PYG{n}{Measurements}\PYG{o}{.}\PYG{n+na}{PERIMETER}\PYG{o}{;}
-    		\PYG{n}{Analyzer}\PYG{o}{.}\PYG{n+na}{setMeasurements}\PYG{o}{(}\PYG{n}{measurements}\PYG{o}{);}
-    		\PYG{n}{analyzer} \PYG{o}{=} \PYG{k}{new} \PYG{n}{Analyzer}\PYG{o}{();}
-    		\PYG{n}{stats} \PYG{o}{=} \PYG{n}{imp}\PYG{o}{.}\PYG{n+na}{getStatistics}\PYG{o}{(}\PYG{n}{measurements}\PYG{o}{);}
-        	
-    		\PYG{n}{analyzer}\PYG{o}{.}\PYG{n+na}{saveResults}\PYG{o}{(}\PYG{n}{stats}\PYG{o}{,} \PYG{n}{roi}\PYG{o}{);}
-    		\PYG{n}{ResultsTable} \PYG{n}{rt} \PYG{o}{=}\PYG{n}{Analyzer}\PYG{o}{.}\PYG{n+na}{getResultsTable}\PYG{o}{();}
-    		\PYG{k+kt}{int} \PYG{n}{counter} \PYG{o}{=} \PYG{n}{rt}\PYG{o}{.}\PYG{n+na}{getCounter}\PYG{o}{();}
-    		\PYG{k+kt}{double} \PYG{n}{area} \PYG{o}{=} \PYG{n}{rt}\PYG{o}{.}\PYG{n+na}{getValueAsDouble}\PYG{o}{(}\PYG{n}{ResultsTable}\PYG{o}{.}\PYG{n+na}{AREA}\PYG{o}{,} \PYG{n}{counter}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{o}{);}
-    		\PYG{k+kt}{double} \PYG{n}{perimeter} \PYG{o}{=} \PYG{n}{rt}\PYG{o}{.}\PYG{n+na}{getValueAsDouble}\PYG{o}{(}\PYG{n}{ResultsTable}\PYG{o}{.}\PYG{n+na}{PERIMETER}\PYG{o}{,} \PYG{n}{counter}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{o}{);}
-    		
-    		\PYG{k}{return} \PYG{n}{perimeter} \PYG{o}{==} \PYG{l+m+mf}{0.0} \PYG{o}{?} \PYG{l+m+mf}{0.0} \PYG{o}{:} \PYG{l+m+mf}{4.0}\PYG{o}{*}\PYG{n}{Math}\PYG{o}{.}\PYG{n+na}{PI}\PYG{o}{*(}\PYG{n}{area}\PYG{o}{/(}\PYG{n}{perimeter}\PYG{o}{*}\PYG{n}{perimeter}\PYG{o}{));}
+            \PYG{k+kt}{int} \PYG{n}{measurements} \PYG{o}{=} \PYG{n}{Analyzer}\PYG{o}{.}\PYG{n+na}{getMeasurements}\PYG{o}{();}
+            \PYG{n}{measurements} \PYG{o}{|=} \PYG{n}{Measurements}\PYG{o}{.}\PYG{n+na}{AREA} \PYG{o}{+} \PYG{n}{Measurements}\PYG{o}{.}\PYG{n+na}{PERIMETER}\PYG{o}{;}
+            \PYG{n}{Analyzer}\PYG{o}{.}\PYG{n+na}{setMeasurements}\PYG{o}{(}\PYG{n}{measurements}\PYG{o}{);}
+            \PYG{n}{analyzer} \PYG{o}{=} \PYG{k}{new} \PYG{n}{Analyzer}\PYG{o}{();}
+            \PYG{n}{stats} \PYG{o}{=} \PYG{n}{imp}\PYG{o}{.}\PYG{n+na}{getStatistics}\PYG{o}{(}\PYG{n}{measurements}\PYG{o}{);}
+
+            \PYG{n}{analyzer}\PYG{o}{.}\PYG{n+na}{saveResults}\PYG{o}{(}\PYG{n}{stats}\PYG{o}{,} \PYG{n}{roi}\PYG{o}{);}
+            \PYG{n}{ResultsTable} \PYG{n}{rt} \PYG{o}{=} \PYG{n}{Analyzer}\PYG{o}{.}\PYG{n+na}{getResultsTable}\PYG{o}{();}
+            \PYG{k+kt}{int} \PYG{n}{counter} \PYG{o}{=} \PYG{n}{rt}\PYG{o}{.}\PYG{n+na}{getCounter}\PYG{o}{();}
+            \PYG{k+kt}{double} \PYG{n}{area} \PYG{o}{=} \PYG{n}{rt}\PYG{o}{.}\PYG{n+na}{getValueAsDouble}\PYG{o}{(}\PYG{n}{ResultsTable}\PYG{o}{.}\PYG{n+na}{AREA}\PYG{o}{,} \PYG{n}{counter} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{1}\PYG{o}{);}
+            \PYG{k+kt}{double} \PYG{n}{perimeter} \PYG{o}{=} \PYG{n}{rt}\PYG{o}{.}\PYG{n+na}{getValueAsDouble}\PYG{o}{(}\PYG{n}{ResultsTable}\PYG{o}{.}\PYG{n+na}{PERIMETER}\PYG{o}{,} \PYG{n}{counter} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{1}\PYG{o}{);}
+
+            \PYG{k}{return} \PYG{n}{perimeter} \PYG{o}{==} \PYG{l+m+mf}{0.0} \PYG{o}{?} \PYG{l+m+mf}{0.0} \PYG{o}{:} \PYG{l+m+mf}{4.0} \PYG{o}{*} \PYG{n}{Math}\PYG{o}{.}\PYG{n+na}{PI} \PYG{o}{*} \PYG{o}{(}\PYG{n}{area} \PYG{o}{/} \PYG{o}{(}\PYG{n}{perimeter} \PYG{o}{*} \PYG{n}{perimeter}\PYG{o}{));}
         \PYG{o}{\PYGZcb{}}
 
     \PYG{o}{\PYGZcb{}}
@@ -442,7 +496,7 @@
         \PYG{o}{\PYGZcb{}}
 
         \PYG{k+kd}{public} \PYG{k+kt}{double} \PYG{n+nf}{CalcFeatureVal}\PYG{o}{(}\PYG{n}{SubImageRegion} \PYG{n}{imgRegion}\PYG{o}{,} \PYG{k+kt}{int} \PYG{n}{FG\PYGZus{}val}\PYG{o}{)} \PYG{o}{\PYGZob{}}
-        	\PYG{n}{Point} \PYG{n}{centroid} \PYG{o}{=} \PYG{n}{calcCentroid}\PYG{o}{(}\PYG{n}{imgRegion}\PYG{o}{,} \PYG{n}{FG\PYGZus{}val}\PYG{o}{);}
+            \PYG{n}{Point} \PYG{n}{centroid} \PYG{o}{=} \PYG{n}{calcCentroid}\PYG{o}{(}\PYG{n}{imgRegion}\PYG{o}{,} \PYG{n}{FG\PYGZus{}val}\PYG{o}{);}
             \PYG{k}{return} \PYG{n}{calcDistance}\PYG{o}{(}\PYG{n}{centroid}\PYG{o}{.}\PYG{n+na}{x}\PYG{o}{,} \PYG{n}{centroid}\PYG{o}{.}\PYG{n+na}{y}\PYG{o}{,} \PYG{n}{centroid}\PYG{o}{.}\PYG{n+na}{x}\PYG{o}{,} \PYG{l+m+mi}{0}\PYG{o}{);}
         \PYG{o}{\PYGZcb{}}
 
@@ -455,7 +509,7 @@
         \PYG{o}{\PYGZcb{}}
 
         \PYG{k+kd}{public} \PYG{k+kt}{double} \PYG{n+nf}{CalcFeatureVal}\PYG{o}{(}\PYG{n}{SubImageRegion} \PYG{n}{imgRegion}\PYG{o}{,} \PYG{k+kt}{int} \PYG{n}{FG\PYGZus{}val}\PYG{o}{)} \PYG{o}{\PYGZob{}}
-        	\PYG{n}{Point} \PYG{n}{centroid} \PYG{o}{=} \PYG{n}{calcCentroid}\PYG{o}{(}\PYG{n}{imgRegion}\PYG{o}{,} \PYG{n}{FG\PYGZus{}val}\PYG{o}{);}
+            \PYG{n}{Point} \PYG{n}{centroid} \PYG{o}{=} \PYG{n}{calcCentroid}\PYG{o}{(}\PYG{n}{imgRegion}\PYG{o}{,} \PYG{n}{FG\PYGZus{}val}\PYG{o}{);}
             \PYG{k}{return} \PYG{n}{calcDistance}\PYG{o}{(}\PYG{n}{centroid}\PYG{o}{.}\PYG{n+na}{x}\PYG{o}{,} \PYG{n}{centroid}\PYG{o}{.}\PYG{n+na}{y}\PYG{o}{,} \PYG{l+m+mi}{0}\PYG{o}{,} \PYG{n}{centroid}\PYG{o}{.}\PYG{n+na}{y}\PYG{o}{);}
         \PYG{o}{\PYGZcb{}}
 
