@@ -17,8 +17,8 @@ import java.util.Vector;
 
 public class OCRanalysis_ implements PlugInFilter {
 
-	private ImagePlus imp;
-	private ImageProcessor ip;
+    private ImagePlus imp;
+    private ImageProcessor ip;
 
     public int setup(String arg, ImagePlus imp) {
         if (arg.equals("about")) {
@@ -45,8 +45,8 @@ public class OCRanalysis_ implements PlugInFilter {
 
 
     public void run(ImageProcessor ip) {
-    	this.ip = ip;
-    	
+        this.ip = ip;
+
         Vector<ImageFeatureBase> featureVect = new Vector<ImageFeatureBase>();
         featureVect.add(new ImageFeatureF_FGcount());
         featureVect.add(new ImageFeatureF_MaxDistX());
@@ -55,6 +55,8 @@ public class OCRanalysis_ implements PlugInFilter {
         featureVect.add(new ImageFeatureF_MinDistanceCentroide());
         featureVect.add(new ImageFeatureF_AvgDistanceCentroide());
         featureVect.add(new ImageFeatureF_Circularity());
+        featureVect.add(new ImageFeatureF_CentroideRelPosX());
+        featureVect.add(new ImageFeatureF_CentroideRelPosY());
 
 
         byte[] pixels = (byte[]) ip.getPixels();
@@ -103,36 +105,60 @@ public class OCRanalysis_ implements PlugInFilter {
         double[] featureResArr = calcFeatureArr(charROI, FG_VAL, featureVect);
         printoutFeatureRes(featureResArr, featureVect);
 
-//        //TODO calculate mean values for all features based on all characters
-//        //==> required for normalization
-        double[] normArr = calculateNormArr(splittedCharacters, BG_VAL, featureVect);
+        //calculate mean values for all features based on all characters
+        //==> required for normalization
+        double[] normArr = calculateNormArr(splittedCharacters, FG_VAL, featureVect);
         printoutFeatureRes(normArr, featureVect);
-//
-//        int hitCount = 0; //count the number of detected characters
-//
-//        //TODO: now detect all matching characters
-//        //forall SubImageRegion sir in splittedCharacters
-//        //if isMatchingChar(..,sir,..) then markRegionInImage(..,sir,..)
-//
-//
-//        IJ.log("# of letters detected = " + hitCount);
-//
-//        bva2.ImageJUtility.showNewImage(binaryImgArr, width, height, "result image with marked letters");
 
+        int hitCount = 0; //count the number of detected characters
+
+
+        //now detect all matching characters
+        for (Vector<SubImageRegion> subImageRegionRow : splittedCharacters) {
+            for (SubImageRegion subImageRegion : subImageRegionRow) {
+                double[] currFeatureArr = calcFeatureArr(subImageRegion, FG_VAL, featureVect);
+                if (isMatchingChar(currFeatureArr, featureResArr, normArr)) {
+                    hitCount++;
+
+                    binaryImgArr = markRegionInImage(binaryImgArr, subImageRegion, BG_VAL, BG_VAL / 2);
+                }
+            }
+        }
+
+        IJ.log("# of letters detected = " + hitCount);
+
+        ImageJUtility.showNewImage(binaryImgArr, width, height, "result image with marked letters");
     } //run
 
     public int[][] markRegionInImage(int[][] inImgArr, SubImageRegion imgRegion, int colorToReplace, int tgtColor) {
-        //TODO: implementation required
+        for (int x = imgRegion.startX; x < imgRegion.startX + imgRegion.width; x++) {
+            for (int y = imgRegion.startY; y < imgRegion.startY + imgRegion.height; y++) {
+                if (inImgArr[x][y] == colorToReplace) {
+                    inImgArr[x][y] = tgtColor;
+                }
+            }
+        }
+
         return inImgArr;
     }
 
     boolean isMatchingChar(double[] currFeatureArr, double[] refFeatureArr, double[] normFeatureArr) {
-        double CORR_COEFFICIENT_LIMIT = -1;//?;
+        double CORR_COEFFICIENT_LIMIT = 0.5;
 
-        //TODO: implementation required
+        double sxy = 0.0;
+        double sx = 0.0;
+        double sy = 0.0;
+        for (int i = 0; i < normFeatureArr.length; i++) {
+            double xi = Math.abs(currFeatureArr[i] - normFeatureArr[i]); // xi - x'
+            double yi = Math.abs(refFeatureArr[i] - normFeatureArr[i]); // yi - y'
+            sxy += xi * yi;
+            sx += Math.pow(xi, 2);
+            sy += Math.pow(yi, 2);
 
+        }
 
-        return false;
+        double correlCoeff = sxy / (Math.sqrt(sx) * Math.sqrt(sy));
+        return correlCoeff > CORR_COEFFICIENT_LIMIT || correlCoeff < -CORR_COEFFICIENT_LIMIT;
     }
 
 
@@ -145,7 +171,6 @@ public class OCRanalysis_ implements PlugInFilter {
 
 
     double[] calcFeatureArr(SubImageRegion region, int FGval, Vector<ImageFeatureBase> featuresToUse) {
-        //TODO implementation required
         double[] featureResArr = new double[featuresToUse.size()];
         for (int i = 0; i < featuresToUse.size(); i++) {
             featureResArr[i] = featuresToUse.get(i).CalcFeatureVal(region, FGval);
@@ -157,7 +182,36 @@ public class OCRanalysis_ implements PlugInFilter {
     double[] calculateNormArr(Vector<Vector<SubImageRegion>> inputRegions, int FGval, Vector<ImageFeatureBase> featuresToUse) {
         //calculate the average per feature to allow for normalization
         double[] returnArr = new double[featuresToUse.size()];
-        //TODO implementation required
+        for (int i = 0; i < featuresToUse.size(); i++) {
+            double avg = 0.0;
+            int count = 0;
+            for (Vector<SubImageRegion> row : inputRegions) {
+                for (SubImageRegion image : row) {
+                    avg += featuresToUse.get(i).CalcFeatureVal(image, FGval);
+                    count++;
+                }
+            }
+            avg /= count;
+            returnArr[i] = avg;
+        }
+
+        double min = Double.MAX_VALUE;
+        double max = Double.MIN_VALUE;
+        double mean = 0.0;
+        for(int i = 0; i < returnArr.length; i++){
+            if(returnArr[i] > max){
+                max = returnArr[i];
+            }
+            if(returnArr[i] < min){
+                min = returnArr[i];
+            }
+            mean += returnArr[i];
+        }
+        mean /= returnArr.length;
+
+        for(int i = 0; i < returnArr.length; i++){
+            returnArr[i] = (returnArr[i] - mean) / (max - min);
+        }
 
         return returnArr;
     }
@@ -175,7 +229,7 @@ public class OCRanalysis_ implements PlugInFilter {
                 // if the value is a FG_val set start points
                 // go on until there is a completely white line
                 if (inImg[x][y] == FG_val) {
-                    if (foundFG == false) {
+                    if (!foundFG) {
                         startY = y;
                     }
                     foundFG = true;
@@ -227,7 +281,7 @@ public class OCRanalysis_ implements PlugInFilter {
 
         return returnCharArr;
     }
-    
+
     void showAbout() {
         IJ.showMessage("About Template_...",
                 "this is a RegionGrowing_ template\n");
@@ -308,26 +362,26 @@ public class OCRanalysis_ implements PlugInFilter {
 
 
     private double calcDistance(int x1, int y1, int x2, int y2) {
-    	return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+        return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
     }
-    
+
     private Point calcCentroid(SubImageRegion imgRegion, int FG_val) {
-    	// https://ask2mujahed.wordpress.com/category/research-topics/ocr/
-    	
-    	int centroidX = 0;
-    	int centroidY = 0;
-    	int cnt = 0;
-    	for(int x = 0; x < imgRegion.width; x++) {
-    		for(int y = 0; y < imgRegion.height; y++) {
-    			if(imgRegion.subImgArr[x][y] == FG_val) {
-    				centroidX += x;
-    				centroidY += y;
-    				cnt++;
-    			}
-    		}
-    	}
-    	
-    	return new Point(centroidX / cnt, centroidY / cnt);
+        // https://ask2mujahed.wordpress.com/category/research-topics/ocr/
+
+        int centroidX = 0;
+        int centroidY = 0;
+        int cnt = 0;
+        for (int x = 0; x < imgRegion.width; x++) {
+            for (int y = 0; y < imgRegion.height; y++) {
+                if (imgRegion.subImgArr[x][y] == FG_val) {
+                    centroidX += x;
+                    centroidY += y;
+                    cnt++;
+                }
+            }
+        }
+
+        return new Point(centroidX / cnt, centroidY / cnt);
     }
 
     class ImageFeatureF_AvgDistanceCentroide extends ImageFeatureBase {
@@ -337,23 +391,23 @@ public class OCRanalysis_ implements PlugInFilter {
         }
 
         public double CalcFeatureVal(SubImageRegion imgRegion, int FG_val) {
-        	Point centroid = calcCentroid(imgRegion, FG_val);
-        	
-        	double avgDist = 0;
-        	int cnt = 0;
-        	for(int x = 0; x < imgRegion.width; x++) {
-        		for(int y = 0; y < imgRegion.height; y++) {
-        			if(imgRegion.subImgArr[x][y] == FG_val) {
-        				avgDist += calcDistance(centroid.x, centroid.y, x, y);
-        				cnt++;
-        			}
-        		}
-        	}
-        	
-        	return avgDist / cnt;
+            Point centroid = calcCentroid(imgRegion, FG_val);
+
+            double avgDist = 0;
+            int cnt = 0;
+            for (int x = 0; x < imgRegion.width; x++) {
+                for (int y = 0; y < imgRegion.height; y++) {
+                    if (imgRegion.subImgArr[x][y] == FG_val) {
+                        avgDist += calcDistance(centroid.x, centroid.y, x, y);
+                        cnt++;
+                    }
+                }
+            }
+
+            return avgDist / cnt;
         }
     }
-    
+
     class ImageFeatureF_MaxDistanceCentroide extends ImageFeatureBase {
 
         public ImageFeatureF_MaxDistanceCentroide() {
@@ -361,21 +415,21 @@ public class OCRanalysis_ implements PlugInFilter {
         }
 
         public double CalcFeatureVal(SubImageRegion imgRegion, int FG_val) {
-        	Point centroid = calcCentroid(imgRegion, FG_val);
-        	
-        	double maxDist = 0;
-        	for(int x = 0; x < imgRegion.width; x++) {
-        		for(int y = 0; y < imgRegion.height; y++) {
-        			if(imgRegion.subImgArr[x][y] == FG_val) {
-        				double actDist = calcDistance(centroid.x, centroid.y, x, y);
-            			if(actDist > maxDist) {
-            				maxDist = actDist;
-            			}	
-        			}
-        		}
-        	}
-        	
-        	return maxDist;
+            Point centroid = calcCentroid(imgRegion, FG_val);
+
+            double maxDist = 0;
+            for (int x = 0; x < imgRegion.width; x++) {
+                for (int y = 0; y < imgRegion.height; y++) {
+                    if (imgRegion.subImgArr[x][y] == FG_val) {
+                        double actDist = calcDistance(centroid.x, centroid.y, x, y);
+                        if (actDist > maxDist) {
+                            maxDist = actDist;
+                        }
+                    }
+                }
+            }
+
+            return maxDist;
         }
     }
 
@@ -386,20 +440,20 @@ public class OCRanalysis_ implements PlugInFilter {
         }
 
         public double CalcFeatureVal(SubImageRegion imgRegion, int FG_val) {
-        	Point centroid = calcCentroid(imgRegion, FG_val);
-        	
-        	double minDist = Double.MAX_VALUE;
-        	for(int x = 0; x < imgRegion.width; x++) {
-        		for(int y = 0; y < imgRegion.height; y++) {
-        			if(imgRegion.subImgArr[x][y] == FG_val) {
-        				double actDist = calcDistance(centroid.x, centroid.y, x, y);
-        				if(actDist < minDist) {
-        					minDist = actDist;
-        				}
-        			}
-        		}
-        	}
-        	
+            Point centroid = calcCentroid(imgRegion, FG_val);
+
+            double minDist = Double.MAX_VALUE;
+            for (int x = 0; x < imgRegion.width; x++) {
+                for (int y = 0; y < imgRegion.height; y++) {
+                    if (imgRegion.subImgArr[x][y] == FG_val) {
+                        double actDist = calcDistance(centroid.x, centroid.y, x, y);
+                        if (actDist < minDist) {
+                            minDist = actDist;
+                        }
+                    }
+                }
+            }
+
             return minDist;
         }
 
@@ -407,30 +461,30 @@ public class OCRanalysis_ implements PlugInFilter {
 
     class ImageFeatureF_Circularity extends ImageFeatureBase {
 
-    	ImageStatistics stats;
-    	Analyzer analyzer;
-    	
+        ImageStatistics stats;
+        Analyzer analyzer;
+
         public ImageFeatureF_Circularity() {
             this.description = "Circularitaet";
         }
 
-		public double CalcFeatureVal(SubImageRegion imgRegion, int FG_val) {
-        	Roi roi = new Roi(imgRegion.startX, imgRegion.startY, imgRegion.width, imgRegion.height);
-    		ip.setRoi(roi);
+        public double CalcFeatureVal(SubImageRegion imgRegion, int FG_val) {
+            Roi roi = new Roi(imgRegion.startX, imgRegion.startY, imgRegion.width, imgRegion.height);
+            ip.setRoi(roi);
 
-    		int measurements = Analyzer.getMeasurements();
-    		measurements |= Measurements.AREA + Measurements.PERIMETER;
-    		Analyzer.setMeasurements(measurements);
-    		analyzer = new Analyzer();
-    		stats = imp.getStatistics(measurements);
-        	
-    		analyzer.saveResults(stats, roi);
-    		ResultsTable rt =Analyzer.getResultsTable();
-    		int counter = rt.getCounter();
-    		double area = rt.getValueAsDouble(ResultsTable.AREA, counter-1);
-    		double perimeter = rt.getValueAsDouble(ResultsTable.PERIMETER, counter-1);
-    		
-    		return perimeter == 0.0 ? 0.0 : 4.0*Math.PI*(area/(perimeter*perimeter));
+            int measurements = Analyzer.getMeasurements();
+            measurements |= Measurements.AREA + Measurements.PERIMETER;
+            Analyzer.setMeasurements(measurements);
+            analyzer = new Analyzer();
+            stats = imp.getStatistics(measurements);
+
+            analyzer.saveResults(stats, roi);
+            ResultsTable rt = Analyzer.getResultsTable();
+            int counter = rt.getCounter();
+            double area = rt.getValueAsDouble(ResultsTable.AREA, counter - 1);
+            double perimeter = rt.getValueAsDouble(ResultsTable.PERIMETER, counter - 1);
+
+            return perimeter == 0.0 ? 0.0 : 4.0 * Math.PI * (area / (perimeter * perimeter));
         }
 
     }
@@ -442,7 +496,7 @@ public class OCRanalysis_ implements PlugInFilter {
         }
 
         public double CalcFeatureVal(SubImageRegion imgRegion, int FG_val) {
-        	Point centroid = calcCentroid(imgRegion, FG_val);
+            Point centroid = calcCentroid(imgRegion, FG_val);
             return calcDistance(centroid.x, centroid.y, centroid.x, 0);
         }
 
@@ -455,7 +509,7 @@ public class OCRanalysis_ implements PlugInFilter {
         }
 
         public double CalcFeatureVal(SubImageRegion imgRegion, int FG_val) {
-        	Point centroid = calcCentroid(imgRegion, FG_val);
+            Point centroid = calcCentroid(imgRegion, FG_val);
             return calcDistance(centroid.x, centroid.y, 0, centroid.y);
         }
 
