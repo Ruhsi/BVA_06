@@ -1,18 +1,24 @@
 
-import com.sun.imageio.plugins.common.ImageUtil;
-import com.sun.javaws.exceptions.InvalidArgumentException;
 import ij.IJ;
 import ij.ImagePlus;
 import ij.gui.GenericDialog;
+import ij.gui.Roi;
+import ij.measure.Measurements;
+import ij.measure.ResultsTable;
+import ij.plugin.filter.Analyzer;
 import ij.plugin.filter.PlugInFilter;
 import ij.process.ImageProcessor;
+import ij.process.ImageStatistics;
 
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.util.Random;
 import java.util.Vector;
 
-
 public class OCRanalysis_ implements PlugInFilter {
 
+	private ImagePlus imp;
+	private ImageProcessor ip;
 
     public int setup(String arg, ImagePlus imp) {
         if (arg.equals("about")) {
@@ -20,6 +26,7 @@ public class OCRanalysis_ implements PlugInFilter {
             return DONE;
         }
 
+        this.imp = imp;
 
         return DOES_8G + DOES_RGB + DOES_STACKS + SUPPORTS_MASKING;
     } //setup
@@ -38,6 +45,8 @@ public class OCRanalysis_ implements PlugInFilter {
 
 
     public void run(ImageProcessor ip) {
+    	this.ip = ip;
+    	
         Vector<ImageFeatureBase> featureVect = new Vector<ImageFeatureBase>();
         featureVect.add(new ImageFeatureF_FGcount());
         featureVect.add(new ImageFeatureF_MaxDistX());
@@ -45,11 +54,13 @@ public class OCRanalysis_ implements PlugInFilter {
         featureVect.add(new ImageFeatureF_MaxDistanceCentroide());
         featureVect.add(new ImageFeatureF_MinDistanceCentroide());
         featureVect.add(new ImageFeatureF_AvgDistanceCentroide());
+        featureVect.add(new ImageFeatureF_Circularity());
+
 
         byte[] pixels = (byte[]) ip.getPixels();
         int width = ip.getWidth();
         int height = ip.getHeight();
-        int[][] inDataArrInt = bva2.ImageJUtility.convertFrom1DByteArr(pixels, width, height);
+        int[][] inDataArrInt = ImageJUtility.convertFrom1DByteArr(pixels, width, height);
 
         //(1) at first do some binarization
         int FG_VAL = 0;
@@ -57,10 +68,10 @@ public class OCRanalysis_ implements PlugInFilter {
         int MARKER_VAL = 127;
         int thresholdVal = 0;//?;
 
-        int[] binaryThreshTF = bva2.ImageTransformationFilter.GetBinaryThresholdTF(255, thresholdVal, MARKER_VAL, FG_VAL, BG_VAL);
-        int[][] binaryImgArr = bva2.ImageTransformationFilter.GetTransformedImage(inDataArrInt, width, height, binaryThreshTF);
+        int[] binaryThreshTF = ImageTransformationFilter.GetBinaryThresholdTF(255, thresholdVal, MARKER_VAL, FG_VAL, BG_VAL);
+        int[][] binaryImgArr = ImageTransformationFilter.GetTransformedImage(inDataArrInt, width, height, binaryThreshTF);
 
-        bva2.ImageJUtility.showNewImage(binaryImgArr, width, height, "binary image at threh = " + thresholdVal);
+        ImageJUtility.showNewImage(binaryImgArr, width, height, "binary image at threh = " + thresholdVal);
 
         //(2) split the image according to fire-trough or multiple region growing
         Vector<Vector<SubImageRegion>> splittedCharacters = splitCharacters(binaryImgArr, width, height, BG_VAL, FG_VAL);
@@ -86,7 +97,7 @@ public class OCRanalysis_ implements PlugInFilter {
         System.out.println("Chosen col: " + tgtCharCol);
 
         SubImageRegion charROI = splittedCharacters.get(tgtCharRow).get(tgtCharCol);
-        bva2.ImageJUtility.showNewImage(charROI.subImgArr, charROI.width, charROI.height, "char at pos " + tgtCharRow + " / " + tgtCharCol);
+        ImageJUtility.showNewImage(charROI.subImgArr, charROI.width, charROI.height, "char at pos " + tgtCharRow + " / " + tgtCharCol);
 
         //calculate features of reference character
         double[] featureResArr = calcFeatureArr(charROI, FG_VAL, featureVect);
@@ -295,10 +306,11 @@ public class OCRanalysis_ implements PlugInFilter {
 
     }
 
+
     private double calcDistance(int x1, int y1, int x2, int y2) {
     	return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
     }
-
+    
     private Point calcCentroid(SubImageRegion imgRegion, int FG_val) {
     	// https://ask2mujahed.wordpress.com/category/research-topics/ocr/
     	
@@ -395,12 +407,30 @@ public class OCRanalysis_ implements PlugInFilter {
 
     class ImageFeatureF_Circularity extends ImageFeatureBase {
 
+    	ImageStatistics stats;
+    	Analyzer analyzer;
+    	
         public ImageFeatureF_Circularity() {
             this.description = "Circularitaet";
         }
 
-        public double CalcFeatureVal(SubImageRegion imgRegion, int FG_val) {
-            return -1; //TODO implementation required
+		public double CalcFeatureVal(SubImageRegion imgRegion, int FG_val) {
+        	Roi roi = new Roi(imgRegion.startX, imgRegion.startY, imgRegion.width, imgRegion.height);
+    		ip.setRoi(roi);
+
+    		int measurements = Analyzer.getMeasurements();
+    		measurements |= Measurements.AREA + Measurements.PERIMETER;
+    		Analyzer.setMeasurements(measurements);
+    		analyzer = new Analyzer();
+    		stats = imp.getStatistics(measurements);
+        	
+    		analyzer.saveResults(stats, roi);
+    		ResultsTable rt =Analyzer.getResultsTable();
+    		int counter = rt.getCounter();
+    		double area = rt.getValueAsDouble(ResultsTable.AREA, counter-1);
+    		double perimeter = rt.getValueAsDouble(ResultsTable.PERIMETER, counter-1);
+    		
+    		return perimeter == 0.0 ? 0.0 : 4.0*Math.PI*(area/(perimeter*perimeter));
         }
 
     }
