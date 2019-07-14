@@ -97,17 +97,39 @@
 
 
 \section{Basic Implementation}
-\subsubsection{Lösungsidee}
+\subsection{Lösungsidee}
 %TODO
 TODO
 
-\subsubsection{Ausarbeitung}
+\subsubsection{Features}
+
+\begin{itemize}
+	\item \textbf{F1: number of pixels: } %TODO Christoph
+	\item \textbf{F2: extent in x-direction (max width): }  %TODO Christoph
+	\item \textbf{F3: extent in y-direction (max height): } %TODO Christoph
+	
+	\item \textbf{F4: average distance from centroid: } Zuerst wird die Berechnung des Zentroide in einer eigenen Hilfsfunktion implementiert, welche später auch für die restlichen Features (die den Zentroiden benötigen) verwendet werden kann. Die X-Koordinate des Zentroiden wird bestimmt, indem alle X-Koordinaten der Pixel, die zum jeweiligen Buchstaben gehören, aufsummiert werden und durch die Anzahl der beteiligten Pixel dividiert werden. Für die Y-Koordinate werden dann die jeweiligen y-Koordinaten aufsummiert. 
+	Um die durchschnittliche Distanz zum Zentroiden zu berechnen werden alle Distanzen zu allen Pixeln die zum Buchstaben gehören aufsummiert und durch die Anzahl der Pixel geteilit. Zum bestimmen der Distanz wird die Formel $\sqrt{((x\textsubscript{2} - x\textsubscript{1})^2 + (y\textsubscript{2} - y\textsubscript{1})^2)}$ verwendet.
+	
+	\item \textbf{F5: min distance from centroid: } Um die minimale Distanz zum Zentroiden zu bestimmen wird der Zentroide wieder mit der zuvor implementierten Hilfsfunktion bestimmt, um dann die minimale Distanz zu finden.
+	
+	\item \textbf{F6: max distance from centroid: } Funktioniert gleich wie das Bestimmen der minimalen Distanz, nur das hier die maximale Distanz als Ergebnis gespeichert wird.
+	
+	\item \textbf{F7: circularity: } Zur Berechnung der \enquote{Circularity} wirde folgende Formel herangezogen:\\ $circularity = \frac{4\pi * area}{perimeter^2}$. Wobei \enquote{area} die Anzahl der Pixel eines Zeichens und \enquote{perimeter} die Anzahl der Pixel des Umfangs sind. Beide Werte können über die ImageJ-Klasse \enquote{Analyzer} ermittelt werden.
+	
+	\item \textbf{F8: rel pos centroid within bounding box, x-direction: } Zur Berechnung des Zentroiden kann wieder die Hilfsfunktion von vorher verwendet werden. Danach kann die relative Position in x-Richtung berechnet werden.
+	
+	\item \textbf{F9: rel pos centroid within bounding box, y-direction: } Funktioniert Äquivalent zu F8, nur das hier die Position in y-Richtung berechnet wird.
+	
+\end{itemize}
+
+\subsection{Ausarbeitung}
 \begin{code}
 	\caption{OCRanalysis\_.java}
 	\javaFile{\srcDir/OCRanalysis_.java}
 	\label{src:exercise-OCRanalysis-java}
 \end{code}
 
-\subsubsection{Tests}
+\subsection{Tests}
 
 \end{document}
